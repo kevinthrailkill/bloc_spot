@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="WfC-RL-e3y">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -7,6 +7,36 @@
         <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
+        <!--Search Table View Controller-->
+        <scene sceneID="RAB-dh-QYm">
+            <objects>
+                <tableViewController id="Jbn-pP-G5S" customClass="SearchTableViewController" customModule="Bloc_Spot" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="hdK-PF-NWy">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="sectionIndexBackgroundColor" red="0.92156862745098034" green="0.92156862745098034" blue="0.94509803921568625" alpha="1" colorSpace="calibratedRGB"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="Spot" id="Qb4-ZF-cIA">
+                                <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Qb4-ZF-cIA" id="XIm-0C-Kfv">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="Jbn-pP-G5S" id="w7Z-Ga-z8X"/>
+                            <outlet property="delegate" destination="Jbn-pP-G5S" id="WBe-yg-ssv"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lvt-vm-yNp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1036" y="-413"/>
+        </scene>
         <!--Main View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -32,7 +62,11 @@
                                         </barButtonItem>
                                         <rightBarButtonItems>
                                             <barButtonItem image="Category Icon" id="JZU-kq-bBJ"/>
-                                            <barButtonItem systemItem="search" id="aXz-nO-Vwa"/>
+                                            <barButtonItem systemItem="search" id="aXz-nO-Vwa">
+                                                <connections>
+                                                    <segue destination="Jbn-pP-G5S" kind="show" id="I4X-V6-leY"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
@@ -105,7 +139,11 @@
                                         </barButtonItem>
                                         <rightBarButtonItems>
                                             <barButtonItem image="Category Icon" id="pSF-pu-bjr"/>
-                                            <barButtonItem systemItem="search" id="edU-0j-MRa"/>
+                                            <barButtonItem systemItem="search" id="edU-0j-MRa">
+                                                <connections>
+                                                    <segue destination="Jbn-pP-G5S" kind="show" id="iFf-hw-IdT"/>
+                                                </connections>
+                                            </barButtonItem>
                                         </rightBarButtonItems>
                                     </navigationItem>
                                 </items>
@@ -132,7 +170,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vzf-iR-9vq" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="887" y="258"/>
+            <point key="canvasLocation" x="1022" y="258"/>
         </scene>
     </scenes>
     <resources>
@@ -140,4 +178,7 @@
         <image name="List Icon" width="22" height="22"/>
         <image name="Map Icon" width="22" height="22"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="iFf-hw-IdT"/>
+    </inferredMetricsTieBreakers>
 </document>

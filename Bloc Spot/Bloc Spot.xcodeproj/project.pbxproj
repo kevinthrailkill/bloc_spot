@@ -16,6 +16,7 @@
 		1977A8E21D0D0403003366A0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1977A8E11D0D0403003366A0 /* MapViewController.swift */; };
 		1977A9141D0D091C003366A0 /* BlocSpot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1977A9121D0D091C003366A0 /* BlocSpot.xcdatamodeld */; };
 		1977A9161D0D0C42003366A0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1977A9151D0D0C42003366A0 /* DataController.swift */; };
+		1977A91D1D0DD6D4003366A0 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1977A91C1D0DD6D4003366A0 /* SearchTableViewController.swift */; };
 		2875A7BC02491194AD62DBF7 /* Pods_Bloc_SpotTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD72C2B6C86CDF16B3306BC /* Pods_Bloc_SpotTests.framework */; };
 		C6FF46B82F02A859B6CC9075 /* Pods_Bloc_Spot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A961011B215757551CC104 /* Pods_Bloc_Spot.framework */; };
 /* End PBXBuildFile section */
@@ -45,6 +46,7 @@
 		1977A8E11D0D0403003366A0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		1977A9131D0D091C003366A0 /* BlocSpot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BlocSpot.xcdatamodel; sourceTree = "<group>"; };
 		1977A9151D0D0C42003366A0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		1977A91C1D0DD6D4003366A0 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
 		742DBE90EE57FF9683A061C2 /* Pods-Bloc Spot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc Spot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc Spot/Pods-Bloc Spot.debug.xcconfig"; sourceTree = "<group>"; };
 		8BF45E2F0BA20E55C4285423 /* Pods-Bloc SpotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc SpotTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc SpotTests/Pods-Bloc SpotTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DDD72C2B6C86CDF16B3306BC /* Pods_Bloc_SpotTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bloc_SpotTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,6 +139,7 @@
 			children = (
 				1977A8DF1D0D0187003366A0 /* MainViewController.swift */,
 				1977A8E11D0D0403003366A0 /* MapViewController.swift */,
+				1977A91C1D0DD6D4003366A0 /* SearchTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1977A9161D0D0C42003366A0 /* DataController.swift in Sources */,
+				1977A91D1D0DD6D4003366A0 /* SearchTableViewController.swift in Sources */,
 				1977A8E01D0D0187003366A0 /* MainViewController.swift in Sources */,
 				1977A8E21D0D0403003366A0 /* MapViewController.swift in Sources */,
 				195A3F011D0CE20A00C91E77 /* AppDelegate.swift in Sources */,

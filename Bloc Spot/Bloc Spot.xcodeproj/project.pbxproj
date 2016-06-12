@@ -17,6 +17,7 @@
 		1977A9141D0D091C003366A0 /* BlocSpot.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 1977A9121D0D091C003366A0 /* BlocSpot.xcdatamodeld */; };
 		1977A9161D0D0C42003366A0 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1977A9151D0D0C42003366A0 /* DataController.swift */; };
 		1977A91D1D0DD6D4003366A0 /* SearchTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1977A91C1D0DD6D4003366A0 /* SearchTableViewController.swift */; };
+		1977A91F1D0DE981003366A0 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1977A91E1D0DE981003366A0 /* MapKit.framework */; };
 		2875A7BC02491194AD62DBF7 /* Pods_Bloc_SpotTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDD72C2B6C86CDF16B3306BC /* Pods_Bloc_SpotTests.framework */; };
 		C6FF46B82F02A859B6CC9075 /* Pods_Bloc_Spot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A961011B215757551CC104 /* Pods_Bloc_Spot.framework */; };
 /* End PBXBuildFile section */
@@ -47,6 +48,7 @@
 		1977A9131D0D091C003366A0 /* BlocSpot.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BlocSpot.xcdatamodel; sourceTree = "<group>"; };
 		1977A9151D0D0C42003366A0 /* DataController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		1977A91C1D0DD6D4003366A0 /* SearchTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchTableViewController.swift; sourceTree = "<group>"; };
+		1977A91E1D0DE981003366A0 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		742DBE90EE57FF9683A061C2 /* Pods-Bloc Spot.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc Spot.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc Spot/Pods-Bloc Spot.debug.xcconfig"; sourceTree = "<group>"; };
 		8BF45E2F0BA20E55C4285423 /* Pods-Bloc SpotTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc SpotTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc SpotTests/Pods-Bloc SpotTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DDD72C2B6C86CDF16B3306BC /* Pods_Bloc_SpotTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Bloc_SpotTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1977A91F1D0DE981003366A0 /* MapKit.framework in Frameworks */,
 				C6FF46B82F02A859B6CC9075 /* Pods_Bloc_Spot.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -147,6 +150,7 @@
 		5AA9412226DAAEC6223B2450 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1977A91E1D0DE981003366A0 /* MapKit.framework */,
 				E7A961011B215757551CC104 /* Pods_Bloc_Spot.framework */,
 				DDD72C2B6C86CDF16B3306BC /* Pods_Bloc_SpotTests.framework */,
 			);
@@ -220,6 +224,11 @@
 				TargetAttributes = {
 					195A3EFC1D0CE20A00C91E77 = {
 						CreatedOnToolsVersion = 7.3.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					195A3F101D0CE20A00C91E77 = {
 						CreatedOnToolsVersion = 7.3.1;

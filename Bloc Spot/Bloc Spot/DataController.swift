@@ -8,16 +8,44 @@
 
 import UIKit
 import CoreData
+import MapKit
 
 
-class DataController {
+protocol DataControllerProtocol {
+    func locationDidUpdateToLocation(location : CLLocation)
+}
+
+
+class DataController : NSObject {
     
     
     
     static let sharedInstance = DataController()
     
+    private var locationManager = CLLocationManager()
     
-    private init() {}
+    var currentLocation : CLLocation?
+    
+    var delegate : DataControllerProtocol!
+    
+
+    
+  
+    
+    private override init() {
+    
+        
+        super.init()
+        
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
+    
+    }
+    
+   
+    
     
     
     // MARK: - Core Data stack
@@ -84,3 +112,39 @@ class DataController {
     }
 
 }
+
+extension DataController : CLLocationManagerDelegate {
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        if status == .AuthorizedWhenInUse {
+            locationManager.requestLocation()
+        }
+    }
+    
+        
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            print("location:: \(location)")
+            
+            currentLocation = location
+            
+            dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                
+                if(self.delegate != nil){
+                    self.delegate.locationDidUpdateToLocation(self.currentLocation!)
+                }
+            }
+
+            
+//            if let location = locations.first {
+//                
+//                loc = location.coordinate
+//            }
+        }
+    }
+    
+    func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+        print("error:: \(error)")
+    }
+}
+
+

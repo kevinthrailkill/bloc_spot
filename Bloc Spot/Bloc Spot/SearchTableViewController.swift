@@ -13,6 +13,8 @@ class SearchTableViewController: UITableViewController {
 
     let searchController = UISearchController(searchResultsController: nil)
     let dataController = DataController.sharedInstance
+    var handleMapSearchDelegate:HandleMapSearch? = nil
+    
     
     var matchingItems:[MKMapItem] = []
     
@@ -94,6 +96,15 @@ class SearchTableViewController: UITableViewController {
         cell.detailTextLabel?.text = parseAddress(selectedItem)
         return cell
         
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedItem = matchingItems[indexPath.row].placemark
+        handleMapSearchDelegate?.dropPinZoomIn(selectedItem)
+        
+        //have to call it twice? ask steve
+        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     
@@ -190,5 +201,8 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
     }
 
 }
+
+
+
 
 

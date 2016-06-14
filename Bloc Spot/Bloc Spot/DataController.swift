@@ -40,7 +40,7 @@ class DataController : NSObject {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
-        locationManager.startUpdatingLocation()
+        locationManager.requestLocation()
     
     }
     
@@ -127,6 +127,9 @@ extension DataController : CLLocationManagerDelegate {
             
             currentLocation = location
             
+            
+            
+            
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 
                 if(self.delegate != nil){
@@ -135,10 +138,7 @@ extension DataController : CLLocationManagerDelegate {
             }
 
             
-//            if let location = locations.first {
-//                
-//                loc = location.coordinate
-//            }
+
         }
     }
     

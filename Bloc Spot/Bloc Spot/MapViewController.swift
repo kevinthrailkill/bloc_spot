@@ -19,9 +19,17 @@ class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
     
-    var selectedPin:MKPlacemark? = nil
+   
     
     let dataController = DataController.sharedInstance
+    
+    var selectedPin:MKPlacemark? = nil
+    
+    var droppedPins = [MKPlacemark]()
+    
+    var resultSearchController:UISearchController? = nil
+
+    
     var currentLocation : CLLocation?
     
     
@@ -30,15 +38,26 @@ class MapViewController: UIViewController {
         dataController.delegate = self;
         mapView.delegate = self
         
+        
+        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! SearchTableViewController
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for spots here ..."
+        searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
+        searchBar.searchBarStyle = UISearchBarStyle.Minimal;
+        navigationItem.titleView = resultSearchController?.searchBar
+
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        resultSearchController?.dimsBackgroundDuringPresentation = true
+        definesPresentationContext = true
+        
+        
+        locationSearchTable.handleMapSearchDelegate = self
 
         // Do any additional setup after loading the view.
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     
     func getDirections(){
         if let selectedPin = selectedPin {
@@ -48,7 +67,6 @@ class MapViewController: UIViewController {
         }
     }
 
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -56,14 +74,14 @@ class MapViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        if (segue.identifier == "searchMapSegue") {
-            // pass data to next view
+        if(segue.identifier == "MainControllerSegue"){
             
-            let searchViewController:SearchTableViewController = segue.destinationViewController as! SearchTableViewController
             
-            searchViewController.handleMapSearchDelegate = self
-
+            
         }
+        
+
+        
     }
 }
 
@@ -88,11 +106,13 @@ extension MapViewController : DataControllerProtocol {
 extension MapViewController: HandleMapSearch {
     func dropPinZoomIn(placemark:MKPlacemark){
         // cache the pin
-        selectedPin = placemark
+        
+        droppedPins.append(placemark)
+        
         // clear existing pins
         
         //need to remove when adding multiple pins
-        mapView.removeAnnotations(mapView.annotations)
+        //mapView.removeAnnotations(mapView.annotations)
         
         
         let annotation = MKPointAnnotation()
@@ -123,9 +143,26 @@ extension MapViewController : MKMapViewDelegate {
         let smallSquare = CGSize(width: 30, height: 30)
         let button = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
         button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
-        button.addTarget(self, action: #selector(MapViewController.getDirections), forControlEvents: .TouchUpInside)
+        
         pinView?.leftCalloutAccessoryView = button
         return pinView
     }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl){
+        
+        for place in droppedPins {
+            if(place.coordinate.latitude == view.annotation!.coordinate.latitude && place.coordinate.longitude == view.annotation!.coordinate.longitude){
+                selectedPin = place
+                
+                self.getDirections()
+            }
+        }
+    }
+    
+    
+    
 }
+
+
+
 

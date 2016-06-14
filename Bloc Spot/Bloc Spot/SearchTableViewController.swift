@@ -11,7 +11,6 @@ import MapKit
 
 class SearchTableViewController: UITableViewController {
 
-    let searchController = UISearchController(searchResultsController: nil)
     let dataController = DataController.sharedInstance
     var handleMapSearchDelegate:HandleMapSearch? = nil
     
@@ -23,33 +22,11 @@ class SearchTableViewController: UITableViewController {
         super.viewDidLoad()
         
         
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        searchController.searchBar.delegate = self
-        searchController.delegate = self
-        searchController.searchBar.placeholder = "Search for spots here ..."
-        tableView.tableHeaderView = searchController.searchBar
-
-        self.view.backgroundColor = UIColor.groupTableViewBackgroundColor()
-        searchController.searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
-        searchController.searchBar.searchBarStyle = UISearchBarStyle.Minimal;
+        
 
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        UIView.animateWithDuration(0.5, delay: 0.3, options: [], animations: {
-            self.searchController.active = true
-
-            self.tableView.contentInset = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 0)
-            }, completion: nil)
-        
-        self.tableView.setContentOffset(CGPointMake(0, -20), animated: true)
-        
-    }
+    
     
     func parseAddress(selectedItem:MKPlacemark) -> String {
         // put a space between "4" and "Melrose Place"
@@ -102,8 +79,6 @@ class SearchTableViewController: UITableViewController {
         let selectedItem = matchingItems[indexPath.row].placemark
         handleMapSearchDelegate?.dropPinZoomIn(selectedItem)
         
-        //have to call it twice? ask steve
-        self.dismissViewControllerAnimated(true, completion: nil)
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
@@ -189,16 +164,7 @@ extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelega
         tableView.reloadData()
     }
     
-    func didPresentSearchController(searchController: UISearchController) {
-        print("Search Bar Presented")
-        searchController.searchBar.becomeFirstResponder()
-    }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        print("Cancel Button Pressed")
-        self.dismissViewControllerAnimated(true, completion: nil)
-        
-    }
 
 }
 

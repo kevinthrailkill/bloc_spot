@@ -11,7 +11,7 @@ import MapKit
 
 
 protocol HandleMapSearch {
-    func dropPinZoomIn(placemark:MKPlacemark)
+    func dropPinZoomIn(mapItem:MKMapItem)
 }
 
 
@@ -23,9 +23,9 @@ class MapViewController: UIViewController {
     
     let dataController = DataController.sharedInstance
     
-    var selectedPin:MKPlacemark? = nil
+    var selectedPin:MKMapItem? = nil
     
-    var droppedPins = [MKPlacemark]()
+    var droppedPins = [MKMapItem]()
     
     var resultSearchController:UISearchController? = nil
 
@@ -55,17 +55,29 @@ class MapViewController: UIViewController {
         
         
         locationSearchTable.handleMapSearchDelegate = self
+        
+        self.resultSearchController?.loadViewIfNeeded()
+
 
         // Do any additional setup after loading the view.
     }
     
+    
+    
     func getDirections(){
         if let selectedPin = selectedPin {
-            let mapItem = MKMapItem(placemark: selectedPin)
             let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
-            mapItem.openInMapsWithLaunchOptions(launchOptions)
+            selectedPin.openInMapsWithLaunchOptions(launchOptions)
         }
     }
+    
+    func savePOI(){
+        if let selectedPin = selectedPin {
+            DataController.sharedInstance.saveMapItem(selectedPin)
+        }
+    }
+    
+    
 
     // MARK: - Navigation
 
@@ -104,10 +116,10 @@ extension MapViewController : DataControllerProtocol {
 
 
 extension MapViewController: HandleMapSearch {
-    func dropPinZoomIn(placemark:MKPlacemark){
+    func dropPinZoomIn(mapItem:MKMapItem){
         // cache the pin
         
-        droppedPins.append(placemark)
+        droppedPins.append(mapItem)
         
         // clear existing pins
         
@@ -116,15 +128,15 @@ extension MapViewController: HandleMapSearch {
         
         
         let annotation = MKPointAnnotation()
-        annotation.coordinate = placemark.coordinate
-        annotation.title = placemark.name
-        if let city = placemark.locality,
-            let state = placemark.administrativeArea {
+        annotation.coordinate = mapItem.placemark.coordinate
+        annotation.title = mapItem.placemark.name
+        if let city = mapItem.placemark.locality,
+            let state = mapItem.placemark.administrativeArea {
             annotation.subtitle = "\(city) \(state)"
         }
         mapView.addAnnotation(annotation)
         let span = MKCoordinateSpanMake(0.05, 0.05)
-        let region = MKCoordinateRegionMake(placemark.coordinate, span)
+        let region = MKCoordinateRegionMake(mapItem.placemark.coordinate, span)
         mapView.setRegion(region, animated: true)
     }
 }
@@ -145,16 +157,35 @@ extension MapViewController : MKMapViewDelegate {
         button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
         
         pinView?.leftCalloutAccessoryView = button
+        pinView?.leftCalloutAccessoryView?.tag = 1
+        
+        let saveButton = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
+        saveButton.setBackgroundImage(UIImage(named: "save"), forState: .Normal)
+        
+        pinView?.rightCalloutAccessoryView = saveButton
+        pinView?.rightCalloutAccessoryView?.tag = 2
+        
+        
         return pinView
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl){
         
         for place in droppedPins {
-            if(place.coordinate.latitude == view.annotation!.coordinate.latitude && place.coordinate.longitude == view.annotation!.coordinate.longitude){
-                selectedPin = place
+
+            if(place.placemark.coordinate.latitude == view.annotation!.coordinate.latitude && place.placemark.coordinate.longitude == view.annotation!.coordinate.longitude){
                 
-                self.getDirections()
+                selectedPin = place
+
+                
+                if (control.tag == 1) {
+                    print("Get Directions")
+                    self.getDirections()
+                }
+                else if (control.tag == 2) {
+                    print("Save POI")
+                    self.savePOI()
+                }
             }
         }
     }

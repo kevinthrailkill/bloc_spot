@@ -76,7 +76,7 @@ class SearchTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let selectedItem = matchingItems[indexPath.row].placemark
+        let selectedItem = matchingItems[indexPath.row]
         handleMapSearchDelegate?.dropPinZoomIn(selectedItem)
         
         self.dismissViewControllerAnimated(true, completion: nil)

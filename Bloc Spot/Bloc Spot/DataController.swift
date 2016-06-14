@@ -110,6 +110,27 @@ class DataController : NSObject {
             }
         }
     }
+    
+    func saveMapItem(mapitem : MKMapItem) {
+        
+        
+        let poi = NSEntityDescription.insertNewObjectForEntityForName("POI", inManagedObjectContext: self.managedObjectContext) as! POI
+        
+        poi.latitude = mapitem.placemark.coordinate.latitude
+        poi.longitude = mapitem.placemark.coordinate.longitude
+        poi.name = mapitem.name
+        poi.phone = mapitem.phoneNumber
+        poi.category = nil
+        
+        do {
+            try managedObjectContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
+        
+    }
+    
+    
 
 }
 

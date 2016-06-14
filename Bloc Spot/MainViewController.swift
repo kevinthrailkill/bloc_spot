@@ -43,23 +43,22 @@ class MainViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "Category Icon"), style: UIBarButtonItemStyle.Plain, target: self, action: nil)
         
-        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! SearchTableViewController
-        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
-        resultSearchController?.searchResultsUpdater = locationSearchTable
+        resultSearchController = UISearchController(searchResultsController: nil)
+        resultSearchController?.searchResultsUpdater = self
         let searchBar = resultSearchController!.searchBar
-        searchBar.sizeToFit()
-        searchBar.placeholder = "Search for spots here ..."
+        searchBar.placeholder = "Search for bookmarked spots here ..."
         searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
         searchBar.searchBarStyle = UISearchBarStyle.Minimal;
-        self.navigationItem.titleView = resultSearchController?.searchBar
-        
+        searchBar.sizeToFit()
         resultSearchController?.hidesNavigationBarDuringPresentation = false
-        resultSearchController?.dimsBackgroundDuringPresentation = true
+        resultSearchController?.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        
+        spotTableView.tableHeaderView = resultSearchController?.searchBar
         
         self.resultSearchController?.loadViewIfNeeded()
         
-        searchBar.becomeFirstResponder()
+        
         
         do {
             try self.fetchedResultsController.performFetch()
@@ -70,6 +69,12 @@ class MainViewController: UIViewController {
 
 
         // Do any additional setup after loading the view.
+    }
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -183,7 +188,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
 
 extension MainViewController: NSFetchedResultsControllerDelegate  {
     
-    // MARK: -
     // MARK: Fetched Results Controller Delegate Methods
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.spotTableView.beginUpdates()
@@ -224,5 +228,39 @@ extension MainViewController: NSFetchedResultsControllerDelegate  {
     }
     
 }
+
+extension MainViewController : UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
+    
+
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        
+        let searchText = searchController.searchBar.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        
+        if(searchText?.characters.count > 0){
+            
+            let resultPredicate = NSPredicate(format: "name contains[c] %@", searchText!)
+            
+            fetchedResultsController.fetchRequest.predicate = resultPredicate
+            
+        }else{
+            fetchedResultsController.fetchRequest.predicate = nil
+        }
+      
+        
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
+        
+        spotTableView.reloadData()
+        
+        
+    }
+    
+}
+
 
 

@@ -121,6 +121,11 @@ class DataController : NSObject {
         poi.name = mapitem.name
         poi.phone = mapitem.phoneNumber
         poi.category = nil
+        poi.visited = false
+        poi.city = mapitem.placemark.locality
+        poi.state = mapitem.placemark.administrativeArea
+        
+        
         
         do {
             try managedObjectContext.save()

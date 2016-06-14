@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 
 protocol HandleMapSearch {
@@ -29,9 +30,39 @@ class MapViewController: UIViewController {
     
     var resultSearchController:UISearchController? = nil
 
-    
     var currentLocation : CLLocation?
     
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        // Initialize Fetch Request
+        let fetchRequest = NSFetchRequest(entityName: "POI")
+        
+        // Add Sort Descriptors
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // Initialize Fetched Results Controller
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        // Configure Fetched Results Controller
+        fetchedResultsController.delegate = self
+        
+        
+        return fetchedResultsController
+    }()
+    
+    func configureAnnotation() {
+        mapView.removeAnnotations(mapView.annotations)
+        
+        if let fetchedAnnotations = self.fetchedResultsController.fetchedObjects {
+            for i in fetchedAnnotations {
+                fetchResultsInsert(i as! POI)
+            }
+        }
+        
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +79,7 @@ class MapViewController: UIViewController {
         searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
         searchBar.searchBarStyle = UISearchBarStyle.Minimal;
         navigationItem.titleView = resultSearchController?.searchBar
+        searchBar.delegate = locationSearchTable
 
         resultSearchController?.hidesNavigationBarDuringPresentation = false
         resultSearchController?.dimsBackgroundDuringPresentation = true
@@ -60,8 +92,23 @@ class MapViewController: UIViewController {
 
 
         // Do any additional setup after loading the view.
+        
+        do {
+            try self.fetchedResultsController.performFetch()
+            self.configureAnnotation()
+
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
+        
+        
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
     
     
     func getDirections(){
@@ -75,6 +122,43 @@ class MapViewController: UIViewController {
         if let selectedPin = selectedPin {
             DataController.sharedInstance.saveMapItem(selectedPin)
         }
+    }
+    
+    func fetchResultsInsert(poi: POI) {
+        
+        let placemark = MKPlacemark.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), addressDictionary: nil)
+        
+        
+        
+        let mapItem = MKMapItem.init(placemark: placemark)
+        mapItem.name = poi.name
+        mapItem.phoneNumber = poi.phone
+        
+        droppedPins.append(mapItem)
+        
+        
+        
+        let annotation = MKPointAnnotation()
+        
+        annotation.coordinate = CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!))
+        annotation.title = poi.name
+        
+        if let city = poi.city,
+            let state = poi.state {
+            annotation.subtitle = "\(city) \(state)"
+        }
+        
+        
+        mapView.addAnnotation(annotation)
+    }
+    
+    func fetchResultsDelete(poi: POI) {
+       // mapView.removeAnnotation(<#T##annotation: MKAnnotation##MKAnnotation#>)
+    }
+    
+    func fetchResultsUpdated(poi: POI) {
+        fetchResultsDelete(poi)
+        fetchResultsInsert(poi)
     }
     
     
@@ -190,9 +274,35 @@ extension MapViewController : MKMapViewDelegate {
         }
     }
     
+}
+
+extension MapViewController: NSFetchedResultsControllerDelegate  {
     
+    // MARK: Fetched Results Controller Delegate Methods
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch (type) {
+        case .Insert:
+            break;
+        case .Delete:
+            break;
+        case .Update:
+            break;
+        case .Move:
+            break;
+        }
+    }
     
 }
+
 
 
 

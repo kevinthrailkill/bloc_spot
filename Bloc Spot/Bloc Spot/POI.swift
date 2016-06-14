@@ -2,7 +2,7 @@
 //  POI.swift
 //  Bloc Spot
 //
-//  Created by Kevin Thrailkill on 6/13/16.
+//  Created by Kevin Thrailkill on 6/14/16.
 //  Copyright © 2016 kevinthrailkill. All rights reserved.
 //
 

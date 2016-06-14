@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		190DCFD51D10982500222D9C /* POI+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFD31D10982500222D9C /* POI+CoreDataProperties.swift */; };
 		190DCFD61D10982500222D9C /* POI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFD41D10982500222D9C /* POI.swift */; };
+		190DCFD81D10A78100222D9C /* POITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFD71D10A78100222D9C /* POITableViewCell.swift */; };
 		195A3F011D0CE20A00C91E77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195A3F001D0CE20A00C91E77 /* AppDelegate.swift */; };
 		195A3F061D0CE20A00C91E77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 195A3F041D0CE20A00C91E77 /* Main.storyboard */; };
 		195A3F081D0CE20A00C91E77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 195A3F071D0CE20A00C91E77 /* Assets.xcassets */; };
@@ -40,6 +41,7 @@
 		11B193C19DBE7C64204E47C5 /* Pods-Bloc Spot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc Spot.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc Spot/Pods-Bloc Spot.release.xcconfig"; sourceTree = "<group>"; };
 		190DCFD31D10982500222D9C /* POI+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "POI+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		190DCFD41D10982500222D9C /* POI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POI.swift; sourceTree = "<group>"; };
+		190DCFD71D10A78100222D9C /* POITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewCell.swift; sourceTree = "<group>"; };
 		195A3EFD1D0CE20A00C91E77 /* Bloc Spot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bloc Spot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		195A3F001D0CE20A00C91E77 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		195A3F051D0CE20A00C91E77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 				195A3F041D0CE20A00C91E77 /* Main.storyboard */,
 				195A3F071D0CE20A00C91E77 /* Assets.xcassets */,
 				195A3F091D0CE20A00C91E77 /* LaunchScreen.storyboard */,
+				190DCFD71D10A78100222D9C /* POITableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -385,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				190DCFD81D10A78100222D9C /* POITableViewCell.swift in Sources */,
 				1977A9341D0F7A43003366A0 /* Category+CoreDataProperties.swift in Sources */,
 				1977A9161D0D0C42003366A0 /* DataController.swift in Sources */,
 				190DCFD51D10982500222D9C /* POI+CoreDataProperties.swift in Sources */,

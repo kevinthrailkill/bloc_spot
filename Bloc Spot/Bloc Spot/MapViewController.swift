@@ -93,20 +93,24 @@ class MapViewController: UIViewController {
 
         // Do any additional setup after loading the view.
         
-        do {
-            try self.fetchedResultsController.performFetch()
-            self.configureAnnotation()
-
-        } catch {
-            let fetchError = error as NSError
-            print("\(fetchError), \(fetchError.userInfo)")
-        }
         
+        
+
         
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        do {
+            try self.fetchedResultsController.performFetch()
+            self.configureAnnotation()
+            
+            
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
         
     }
     
@@ -192,6 +196,9 @@ extension MapViewController : DataControllerProtocol {
         let span = MKCoordinateSpanMake(0.05, 0.05)
         let region = MKCoordinateRegion(center:   dataController.currentLocation!.coordinate, span: span)
         mapView.setRegion(region, animated: true)
+        
+        
+      //  mapView.showAnnotations(mapView.annotations, animated: true)
         
         print("Updating location")
     }

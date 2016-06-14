@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class MainViewController: UIViewController {
 
@@ -89,19 +90,47 @@ class MainViewController: UIViewController {
     
     }
     
-    func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+    func configureCell(cell: POITableViewCell, atIndexPath indexPath: NSIndexPath) {
         // Fetch Record
         let record = fetchedResultsController.objectAtIndexPath(indexPath)
         
         // Update Cell
         if let name = record.valueForKey("name") as? String {
-            cell.textLabel?.text = name
+            cell.name.text = name
             
         }
         
         if let phone = record.valueForKey("phone") as? String {
-            cell.detailTextLabel?.text = phone
+            cell.phoneNumber.text = phone
         }
+        
+        if let city = record.valueForKey("city") as? String,
+            let state = record.valueForKey("state") as? String {
+            cell.sub.text = "\(city) \(state)"
+        }
+        
+        if let latitude = record.valueForKey("latitude") as? Double,
+            let longitude = record.valueForKey("longitude") as? Double {
+            let spotLoc = CLLocation.init(latitude: latitude, longitude: longitude)
+            var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
+            
+            
+            distance = round(distance * 100)/100
+            
+            if(distance < 1.0){
+                cell.distance.text = "(< 1 mi.)"
+            }else{
+                cell.distance.text = "(" + distance.description + " mi.)"
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        
     }
     
     
@@ -140,8 +169,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Spot", forIndexPath: indexPath)
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("Spot", forIndexPath: indexPath) as! POITableViewCell
         // Configure Table View Cell
         configureCell(cell, atIndexPath: indexPath)
         
@@ -211,7 +239,7 @@ extension MainViewController: NSFetchedResultsControllerDelegate  {
             break;
         case .Update:
             if let indexPath = indexPath {
-                let cell = self.spotTableView.cellForRowAtIndexPath(indexPath)! as UITableViewCell
+                let cell = self.spotTableView.cellForRowAtIndexPath(indexPath) as! POITableViewCell
                 configureCell(cell, atIndexPath: indexPath)
             }
             break;

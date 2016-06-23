@@ -19,6 +19,7 @@ protocol HandleMapSearch {
 class MapViewController: UIViewController {
 
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet var annotationView: UIView!
     
    
     
@@ -141,29 +142,34 @@ class MapViewController: UIViewController {
         droppedPins.append(mapItem)
         
         
-        
-        let annotation = MKPointAnnotation()
-        
-        annotation.coordinate = CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!))
-        annotation.title = poi.name
+        var sub : String?
         
         if let city = poi.city,
             let state = poi.state {
-            annotation.subtitle = "\(city) \(state)"
+            sub = "\(city) \(state)"
         }
+        
+        
+        let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), title: poi.name!, subtitle: sub!, category: poi.category!)
+        
+        
         
         
         mapView.addAnnotation(annotation)
     }
     
     func fetchResultsDelete(poi: POI) {
-       // mapView.removeAnnotation(<#T##annotation: MKAnnotation##MKAnnotation#>)
+       // mapView.removeAnnotation(annotation: MKAnnotation)
     }
     
     func fetchResultsUpdated(poi: POI) {
         fetchResultsDelete(poi)
         fetchResultsInsert(poi)
     }
+    
+    
+    
+    
     
     
 
@@ -237,27 +243,57 @@ extension MapViewController : MKMapViewDelegate {
         if annotation is MKUserLocation {
             //return nil so map view draws "blue dot" for standard user location
             return nil
+        } else if annotation is SavedAnnotation {
+            
+            let reuseId = "pin"
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            
+
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
+
+            
+
+            
+            pinView?.pinTintColor = UIColor.redColor()
+
+            
+            let widthConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
+            annotationView!.addConstraint(widthConstraint)
+            
+            let heightConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 150)
+            annotationView!.addConstraint(heightConstraint)
+
+            pinView?.detailCalloutAccessoryView = annotationView
+
+            
+            return pinView
+            
+            
+            
+        } else{
+            let reuseId = "pin"
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.pinTintColor = UIColor.orangeColor()
+            pinView?.canShowCallout = true
+            let smallSquare = CGSize(width: 30, height: 30)
+            let button = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
+            button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
+            
+            pinView?.leftCalloutAccessoryView = button
+            pinView?.leftCalloutAccessoryView?.tag = 1
+            
+            let saveButton = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
+            saveButton.setBackgroundImage(UIImage(named: "save"), forState: .Normal)
+            
+            pinView?.rightCalloutAccessoryView = saveButton
+            pinView?.rightCalloutAccessoryView?.tag = 2
+        
+            return pinView
+            
         }
-        let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
-        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-        pinView?.pinTintColor = UIColor.orangeColor()
-        pinView?.canShowCallout = true
-        let smallSquare = CGSize(width: 30, height: 30)
-        let button = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
         
-        pinView?.leftCalloutAccessoryView = button
-        pinView?.leftCalloutAccessoryView?.tag = 1
-        
-        let saveButton = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
-        saveButton.setBackgroundImage(UIImage(named: "save"), forState: .Normal)
-        
-        pinView?.rightCalloutAccessoryView = saveButton
-        pinView?.rightCalloutAccessoryView?.tag = 2
-        
-        
-        return pinView
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl){

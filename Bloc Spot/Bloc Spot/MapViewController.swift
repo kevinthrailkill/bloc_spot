@@ -18,8 +18,8 @@ protocol HandleMapSearch {
 
 class MapViewController: UIViewController {
 
+    @IBOutlet var annotationView: SavedPOIView!
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet var annotationView: UIView!
     
    
     
@@ -263,6 +263,10 @@ extension MapViewController : MKMapViewDelegate {
             
             let heightConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 150)
             annotationView!.addConstraint(heightConstraint)
+            
+            
+            annotationView.title.text = annotation.title!
+            annotationView.distance.text = annotation.subtitle!
 
             pinView?.detailCalloutAccessoryView = annotationView
 

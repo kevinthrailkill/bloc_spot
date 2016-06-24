@@ -101,12 +101,12 @@
                         <barButtonItem key="rightBarButtonItem" image="Category Icon" id="b7q-ep-yoX"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="annotationView" destination="Tkm-uf-ttn" id="vaa-ln-yEo"/>
+                        <outlet property="annotationView" destination="Tkm-uf-ttn" id="20p-YP-VGe"/>
                         <outlet property="mapView" destination="1n3-34-E2n" id="ea1-ss-ocy"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vzf-iR-9vq" sceneMemberID="firstResponder"/>
-                <view contentMode="scaleToFill" id="Tkm-uf-ttn">
+                <view contentMode="scaleToFill" id="Tkm-uf-ttn" customClass="SavedPOIView" customModule="Bloc_Spot" customModuleProvider="target">
                     <rect key="frame" x="0.0" y="0.0" width="250" height="150"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -128,15 +128,21 @@
                             <state key="normal" title="D">
                                 <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
+                            <connections>
+                                <action selector="getDirections:" destination="Tkm-uf-ttn" eventType="touchUpInside" id="QVx-Ch-MAO"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ux-V4-QhG">
                             <rect key="frame" x="207" y="0.0" width="35" height="44"/>
                             <state key="normal" title="V">
                                 <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             </state>
+                            <connections>
+                                <action selector="clickVisited:" destination="Tkm-uf-ttn" eventType="touchUpInside" id="Rjm-eY-7OO"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z8w-HU-2fR">
-                            <rect key="frame" x="8" y="23" width="197" height="21"/>
+                            <rect key="frame" x="8" y="23" width="58" height="21"/>
                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                             <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
@@ -155,26 +161,46 @@
                             <fontDescription key="fontDescription" type="system" pointSize="11"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRk-9O-jiE">
-                            <rect key="frame" x="176" y="108" width="30" height="34"/>
-                            <state key="normal" title="S">
-                                <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </state>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mR6-ON-Gst">
-                            <rect key="frame" x="213" y="108" width="30" height="34"/>
-                            <state key="normal" title="T">
-                                <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            </state>
-                        </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Category" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XTa-46-fVD">
                             <rect key="frame" x="8" y="109.5" width="87" height="32.5"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bRk-9O-jiE">
+                            <rect key="frame" x="176" y="108" width="30" height="34"/>
+                            <state key="normal" title="S">
+                                <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="sharePOI:" destination="Tkm-uf-ttn" eventType="touchUpInside" id="tzt-Au-qNu"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mR6-ON-Gst">
+                            <rect key="frame" x="213" y="108" width="30" height="34"/>
+                            <state key="normal" title="T">
+                                <color key="titleColor" red="0.059607951300000003" green="0.77500049199999999" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="deletePOI:" destination="Tkm-uf-ttn" eventType="touchUpInside" id="bMC-fp-GmA"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nqh-Fx-nog">
+                            <rect key="frame" x="74" y="23" width="125" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                            <color key="textColor" red="0.71764705880000002" green="0.71764705880000002" blue="0.75294117650000003" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <connections>
+                        <outlet property="category" destination="XTa-46-fVD" id="yBn-HD-PwY"/>
+                        <outlet property="distance" destination="z8w-HU-2fR" id="kFK-ML-l1r"/>
+                        <outlet property="note" destination="eRH-XU-Mpw" id="k1j-p7-xMh"/>
+                        <outlet property="phone" destination="nqh-Fx-nog" id="i4v-5N-1sn"/>
+                        <outlet property="title" destination="25v-32-gXL" id="vRH-bE-pU5"/>
+                        <outlet property="visited" destination="7ux-V4-QhG" id="7hb-lC-wku"/>
+                    </connections>
                 </view>
             </objects>
             <point key="canvasLocation" x="-312" y="145"/>

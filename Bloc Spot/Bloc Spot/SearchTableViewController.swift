@@ -136,7 +136,9 @@ class SearchTableViewController: UITableViewController {
 extension SearchTableViewController : UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
     
     // Mark: - Search Controller / Search Bar
-    
+    func searchBarShouldBeginEditing(searchBar: UISearchBar) -> Bool    {
+        return true
+    }
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         

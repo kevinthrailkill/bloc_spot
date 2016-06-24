@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 
 protocol HandleMapSearch {
@@ -17,6 +18,7 @@ protocol HandleMapSearch {
 
 class MapViewController: UIViewController {
 
+    @IBOutlet var annotationView: SavedPOIView!
     @IBOutlet weak var mapView: MKMapView!
     
    
@@ -29,9 +31,39 @@ class MapViewController: UIViewController {
     
     var resultSearchController:UISearchController? = nil
 
-    
     var currentLocation : CLLocation?
     
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        // Initialize Fetch Request
+        let fetchRequest = NSFetchRequest(entityName: "POI")
+        
+        // Add Sort Descriptors
+        let sortDescriptor = NSSortDescriptor(key: "name", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // Initialize Fetched Results Controller
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: DataController.sharedInstance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
+        
+        // Configure Fetched Results Controller
+        fetchedResultsController.delegate = self
+        
+        
+        return fetchedResultsController
+    }()
+    
+    func configureAnnotation() {
+        mapView.removeAnnotations(mapView.annotations)
+        
+        if let fetchedAnnotations = self.fetchedResultsController.fetchedObjects {
+            for i in fetchedAnnotations {
+                fetchResultsInsert(i as! POI)
+            }
+        }
+        
+        
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +80,7 @@ class MapViewController: UIViewController {
         searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
         searchBar.searchBarStyle = UISearchBarStyle.Minimal;
         navigationItem.titleView = resultSearchController?.searchBar
+        searchBar.delegate = locationSearchTable
 
         resultSearchController?.hidesNavigationBarDuringPresentation = false
         resultSearchController?.dimsBackgroundDuringPresentation = true
@@ -60,8 +93,27 @@ class MapViewController: UIViewController {
 
 
         // Do any additional setup after loading the view.
+        
+        
+        
+
+        
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        do {
+            try self.fetchedResultsController.performFetch()
+            self.configureAnnotation()
+            
+            
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
+        
+    }
     
     
     func getDirections(){
@@ -73,9 +125,50 @@ class MapViewController: UIViewController {
     
     func savePOI(){
         if let selectedPin = selectedPin {
+           
+            let oldAnnotations = mapView.annotations
+            
+            for annotation in oldAnnotations {
+                if(selectedPin.placemark.coordinate.longitude == annotation.coordinate.longitude && selectedPin.placemark.coordinate.latitude == annotation.coordinate.latitude){
+                    mapView.removeAnnotation(annotation)
+                }
+            }
+            
+            
             DataController.sharedInstance.saveMapItem(selectedPin)
         }
     }
+    
+    func fetchResultsInsert(poi: POI) {
+        
+        
+        let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), poi: poi)
+
+        mapView.addAnnotation(annotation)
+    }
+    
+    func fetchResultsDelete(poi: POI) {
+        
+        let coordinate = CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!))
+        
+        
+        let oldAnnotations = mapView.annotations
+        
+        for annotation in oldAnnotations {
+            if(coordinate.longitude == annotation.coordinate.longitude && coordinate.latitude == annotation.coordinate.latitude){
+                mapView.removeAnnotation(annotation)
+            }
+        }
+    }
+    
+    func fetchResultsUpdated(poi: POI) {
+        fetchResultsDelete(poi)
+        fetchResultsInsert(poi)
+    }
+    
+    
+    
+    
     
     
 
@@ -108,6 +201,9 @@ extension MapViewController : DataControllerProtocol {
         let span = MKCoordinateSpanMake(0.05, 0.05)
         let region = MKCoordinateRegion(center:   dataController.currentLocation!.coordinate, span: span)
         mapView.setRegion(region, animated: true)
+        
+        
+      //  mapView.showAnnotations(mapView.annotations, animated: true)
         
         print("Updating location")
     }
@@ -146,27 +242,100 @@ extension MapViewController : MKMapViewDelegate {
         if annotation is MKUserLocation {
             //return nil so map view draws "blue dot" for standard user location
             return nil
+        } else if annotation is SavedAnnotation {
+            
+            let reuseId = "pin"
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            
+
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.canShowCallout = true
+            
+            pinView?.pinTintColor = UIColor.redColor()
+
+            
+            let widthConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
+            annotationView!.addConstraint(widthConstraint)
+            
+            let heightConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 150)
+            annotationView!.addConstraint(heightConstraint)
+            
+            
+            pinView?.detailCalloutAccessoryView = annotationView
+
+            
+            return pinView
+            
+            
+            
+        } else{
+            let reuseId = "pin"
+            var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView?.pinTintColor = UIColor.orangeColor()
+            pinView?.canShowCallout = true
+            let smallSquare = CGSize(width: 30, height: 30)
+            let button = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
+            button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
+            
+            pinView?.leftCalloutAccessoryView = button
+            pinView?.leftCalloutAccessoryView?.tag = 1
+            
+            let saveButton = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
+            saveButton.setBackgroundImage(UIImage(named: "save"), forState: .Normal)
+            
+            pinView?.rightCalloutAccessoryView = saveButton
+            pinView?.rightCalloutAccessoryView?.tag = 2
+        
+            return pinView
+            
         }
-        let reuseId = "pin"
-        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
-        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-        pinView?.pinTintColor = UIColor.orangeColor()
-        pinView?.canShowCallout = true
-        let smallSquare = CGSize(width: 30, height: 30)
-        let button = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
-        button.setBackgroundImage(UIImage(named: "car"), forState: .Normal)
         
-        pinView?.leftCalloutAccessoryView = button
-        pinView?.leftCalloutAccessoryView?.tag = 1
+    }
+    
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        print("Annotation selected")
         
-        let saveButton = UIButton(frame: CGRect(origin: CGPointZero, size: smallSquare))
-        saveButton.setBackgroundImage(UIImage(named: "save"), forState: .Normal)
+        if let annotation = view.annotation as? SavedAnnotation {
+            print("Your annotation title: \(annotation.poi.name!)");
+            
+            annotation.title = ""
+            
+            let detailView = view.detailCalloutAccessoryView as? SavedPOIView
+            
+            detailView!.title.text = annotation.poi.name!
+            
+            if let latitude = annotation.poi.latitude as? Double,
+                let longitude = annotation.poi.longitude as? Double {
+                let spotLoc = CLLocation.init(latitude: latitude, longitude: longitude)
+                var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
+                
+                
+                distance = round(distance * 100)/100
+                
+                if(distance < 1.0){
+                    detailView!.distance.text = "(< 1 mi.)"
+                }else{
+                    detailView!.distance.text = "(" + distance.description + " mi.)"
+                }
+            }
+            detailView!.phoneText.text = annotation.poi.phone
+            detailView!.poi = annotation.poi
+            
+        }
+    }
+    
+    func mapView( mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
+        print("Annotation selected")
         
-        pinView?.rightCalloutAccessoryView = saveButton
-        pinView?.rightCalloutAccessoryView?.tag = 2
-        
-        
-        return pinView
+        if let annotation = view.annotation as? SavedAnnotation {
+            print("Your deselected annotation title: \(annotation.poi.name!)");
+            
+             annotation.title = "temp"
+            
+            
+        }
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl){
@@ -190,9 +359,38 @@ extension MapViewController : MKMapViewDelegate {
         }
     }
     
+}
+
+extension MapViewController: NSFetchedResultsControllerDelegate  {
     
+    // MARK: Fetched Results Controller Delegate Methods
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+         UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+    }
+    
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        switch (type) {
+        case .Insert:
+            fetchResultsInsert((anObject as? POI)!)
+            break;
+        case .Delete:
+            fetchResultsDelete((anObject as? POI)!)
+            break;
+        case .Update:
+            fetchResultsUpdated((anObject as? POI)!)
+            break;
+        case .Move:
+            break;
+        }
+    }
     
 }
+
 
 
 

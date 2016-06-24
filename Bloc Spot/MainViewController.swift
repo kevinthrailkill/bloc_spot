@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreLocation
 
 class MainViewController: UIViewController {
 
@@ -43,23 +44,22 @@ class MainViewController: UIViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "Category Icon"), style: UIBarButtonItemStyle.Plain, target: self, action: nil)
         
-        let locationSearchTable = storyboard!.instantiateViewControllerWithIdentifier("LocationSearchTable") as! SearchTableViewController
-        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
-        resultSearchController?.searchResultsUpdater = locationSearchTable
+        resultSearchController = UISearchController(searchResultsController: nil)
+        resultSearchController?.searchResultsUpdater = self
         let searchBar = resultSearchController!.searchBar
-        searchBar.sizeToFit()
-        searchBar.placeholder = "Search for spots here ..."
+        searchBar.placeholder = "Search for bookmarked spots here ..."
         searchBar.barTintColor = UIColor.groupTableViewBackgroundColor()
         searchBar.searchBarStyle = UISearchBarStyle.Minimal;
-        self.navigationItem.titleView = resultSearchController?.searchBar
-        
+        searchBar.sizeToFit()
         resultSearchController?.hidesNavigationBarDuringPresentation = false
-        resultSearchController?.dimsBackgroundDuringPresentation = true
+        resultSearchController?.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        
+        spotTableView.tableHeaderView = resultSearchController?.searchBar
         
         self.resultSearchController?.loadViewIfNeeded()
         
-        searchBar.becomeFirstResponder()
+        
         
         do {
             try self.fetchedResultsController.performFetch()
@@ -70,6 +70,12 @@ class MainViewController: UIViewController {
 
 
         // Do any additional setup after loading the view.
+    }
+    
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,19 +90,47 @@ class MainViewController: UIViewController {
     
     }
     
-    func configureCell(cell: UITableViewCell, atIndexPath indexPath: NSIndexPath) {
+    func configureCell(cell: POITableViewCell, atIndexPath indexPath: NSIndexPath) {
         // Fetch Record
         let record = fetchedResultsController.objectAtIndexPath(indexPath)
         
         // Update Cell
         if let name = record.valueForKey("name") as? String {
-            cell.textLabel?.text = name
+            cell.name.text = name
             
         }
         
         if let phone = record.valueForKey("phone") as? String {
-            cell.detailTextLabel?.text = phone
+            cell.phoneNumber.text = phone
         }
+        
+        if let city = record.valueForKey("city") as? String,
+            let state = record.valueForKey("state") as? String {
+            cell.sub.text = "\(city) \(state)"
+        }
+        
+        if let latitude = record.valueForKey("latitude") as? Double,
+            let longitude = record.valueForKey("longitude") as? Double {
+            let spotLoc = CLLocation.init(latitude: latitude, longitude: longitude)
+            var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
+            
+            
+            distance = round(distance * 100)/100
+            
+            if(distance < 1.0){
+                cell.distance.text = "(< 1 mi.)"
+            }else{
+                cell.distance.text = "(" + distance.description + " mi.)"
+            }
+            
+            
+        }
+        
+        
+        
+        
+        
+        
     }
     
     
@@ -135,8 +169,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
     
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Spot", forIndexPath: indexPath)
-        
+        let cell = tableView.dequeueReusableCellWithIdentifier("Spot", forIndexPath: indexPath) as! POITableViewCell
         // Configure Table View Cell
         configureCell(cell, atIndexPath: indexPath)
         
@@ -183,7 +216,6 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
 
 extension MainViewController: NSFetchedResultsControllerDelegate  {
     
-    // MARK: -
     // MARK: Fetched Results Controller Delegate Methods
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         self.spotTableView.beginUpdates()
@@ -207,7 +239,7 @@ extension MainViewController: NSFetchedResultsControllerDelegate  {
             break;
         case .Update:
             if let indexPath = indexPath {
-                let cell = self.spotTableView.cellForRowAtIndexPath(indexPath)! as UITableViewCell
+                let cell = self.spotTableView.cellForRowAtIndexPath(indexPath) as! POITableViewCell
                 configureCell(cell, atIndexPath: indexPath)
             }
             break;
@@ -224,5 +256,39 @@ extension MainViewController: NSFetchedResultsControllerDelegate  {
     }
     
 }
+
+extension MainViewController : UISearchResultsUpdating, UISearchBarDelegate, UISearchControllerDelegate {
+    
+
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+        
+        let searchText = searchController.searchBar.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+        
+        
+        if(searchText?.characters.count > 0){
+            
+            let resultPredicate = NSPredicate(format: "name contains[c] %@", searchText!)
+            
+            fetchedResultsController.fetchRequest.predicate = resultPredicate
+            
+        }else{
+            fetchedResultsController.fetchRequest.predicate = nil
+        }
+      
+        
+        do {
+            try self.fetchedResultsController.performFetch()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
+        
+        spotTableView.reloadData()
+        
+        
+    }
+    
+}
+
 
 

@@ -120,7 +120,12 @@ class DataController : NSObject {
         poi.longitude = mapitem.placemark.coordinate.longitude
         poi.name = mapitem.name
         poi.phone = mapitem.phoneNumber
-        poi.category = nil
+        poi.category = "Shops"
+        poi.visited = false
+        poi.city = mapitem.placemark.locality
+        poi.state = mapitem.placemark.administrativeArea
+        
+        
         
         do {
             try managedObjectContext.save()
@@ -129,6 +134,45 @@ class DataController : NSObject {
         }
         
     }
+    
+    func deletePOI(poi : POI) {
+        
+        self.managedObjectContext.deleteObject(poi)
+        
+        
+        
+        do {
+            try managedObjectContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
+        
+    }
+    
+    func updatePOI(poi : POI) {
+        
+        
+        
+        
+//        poi.latitude = mapitem.placemark.coordinate.latitude
+//        poi.longitude = mapitem.placemark.coordinate.longitude
+//        poi.name = mapitem.name
+//        poi.phone = mapitem.phoneNumber
+//        poi.category = "Shops"
+//        poi.visited = false
+//        poi.city = mapitem.placemark.locality
+//        poi.state = mapitem.placemark.administrativeArea
+        
+        
+        
+        do {
+            try managedObjectContext.save()
+        } catch {
+            fatalError("Failure to save context: \(error)")
+        }
+        
+    }
+
     
     
 

@@ -82,3 +82,11 @@ class POITableViewCell: UITableViewCell {
     }
 
 }
+
+extension POITableViewCell : UITextViewDelegate {
+    func textViewDidEndEditing(textView: UITextView) {
+        poi?.note = note.text
+        
+        DataController.sharedInstance.updatePOI(poi!)
+    }
+}

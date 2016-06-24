@@ -59,6 +59,9 @@ class MainViewController: UIViewController {
         
         self.resultSearchController?.loadViewIfNeeded()
         
+        //Add to viewDidLoad:
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(MainViewController.dismissKeyboard))
+        self.spotTableView.addGestureRecognizer(tapGesture)
         
         
         do {
@@ -114,8 +117,25 @@ class MainViewController: UIViewController {
         
         cell.poi = poi
         cell.delegate = self
+        cell.note.delegate = cell
             
         
+    }
+    
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+    
+    func dismissKeyboard(){
+        self.view.endEditing(true)
+    }
+    
+    
+    
+    //Or since you wanted to dismiss when another cell is selected use:
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        dismissKeyboard()
     }
     
     
@@ -199,6 +219,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
      return true
      }
      */
+    
+    
     
 }
 

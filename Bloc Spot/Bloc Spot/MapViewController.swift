@@ -305,6 +305,7 @@ extension MapViewController : MKMapViewDelegate {
             let detailView = view.detailCalloutAccessoryView as? SavedPOIView
             
             detailView!.title.text = annotation.poi.name!
+            detailView!.note.text = annotation.poi.note!
             
             if let latitude = annotation.poi.latitude as? Double,
                 let longitude = annotation.poi.longitude as? Double {

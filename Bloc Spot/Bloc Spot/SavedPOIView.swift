@@ -9,7 +9,15 @@
 import UIKit
 import MapKit
 
+
+protocol POIDetailProtocol : NSObjectProtocol {
+    func loadNewScreen(controller: UIViewController);
+}
+
 class SavedPOIView: UIView {
+    
+    
+    weak var delegate: POIDetailProtocol?
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var distance: UILabel!
@@ -34,6 +42,17 @@ class SavedPOIView: UIView {
     }
     
     @IBAction func sharePOI(sender: UIButton) {
+        
+        var itemsToShare = [String]()
+        itemsToShare.append(title.text!)
+        itemsToShare.append(distance.text!)
+        itemsToShare.append(phoneText.text)
+        itemsToShare.append(note.text)
+        
+        let actController = UIActivityViewController.init(activityItems: itemsToShare, applicationActivities: nil)
+        
+        
+        self.delegate?.loadNewScreen(actController)
         
     }
     

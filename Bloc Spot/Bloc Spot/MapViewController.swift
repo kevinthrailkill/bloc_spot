@@ -305,6 +305,7 @@ extension MapViewController : MKMapViewDelegate {
             let detailView = view.detailCalloutAccessoryView as? SavedPOIView
             
             detailView!.title.text = annotation.poi.name!
+            detailView!.note.text = annotation.poi.note!
             
             if let latitude = annotation.poi.latitude as? Double,
                 let longitude = annotation.poi.longitude as? Double {
@@ -322,6 +323,7 @@ extension MapViewController : MKMapViewDelegate {
             }
             detailView!.phoneText.text = annotation.poi.phone
             detailView!.poi = annotation.poi
+            detailView!.delegate = self
             
         }
     }
@@ -333,6 +335,12 @@ extension MapViewController : MKMapViewDelegate {
             print("Your deselected annotation title: \(annotation.poi.name!)");
             
              annotation.title = "temp"
+            
+            let poi = annotation.poi
+            
+            poi.note = annotationView.note.text
+            
+            DataController.sharedInstance.updatePOI(annotation.poi)
             
             
         }
@@ -389,6 +397,12 @@ extension MapViewController: NSFetchedResultsControllerDelegate  {
         }
     }
     
+}
+
+extension MapViewController : POIDetailProtocol {
+    func loadNewScreen(controller: UIViewController){
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 

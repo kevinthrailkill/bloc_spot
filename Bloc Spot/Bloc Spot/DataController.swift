@@ -120,10 +120,11 @@ class DataController : NSObject {
         poi.longitude = mapitem.placemark.coordinate.longitude
         poi.name = mapitem.name
         poi.phone = mapitem.phoneNumber
-        poi.category = "Shops"
+        poi.category = "All"
         poi.visited = false
         poi.city = mapitem.placemark.locality
         poi.state = mapitem.placemark.administrativeArea
+        poi.note = "Save notes for your point of interest here"
         
         
         
@@ -134,6 +135,8 @@ class DataController : NSObject {
         }
         
     }
+    
+    
     
     func deletePOI(poi : POI) {
         
@@ -154,15 +157,9 @@ class DataController : NSObject {
         
         
         
-//        poi.latitude = mapitem.placemark.coordinate.latitude
-//        poi.longitude = mapitem.placemark.coordinate.longitude
-//        poi.name = mapitem.name
-//        poi.phone = mapitem.phoneNumber
-//        poi.category = "Shops"
-//        poi.visited = false
-//        poi.city = mapitem.placemark.locality
-//        poi.state = mapitem.placemark.administrativeArea
-        
+        if(poi.note?.characters.count == 0){
+            poi.note = "Save notes for your point of interest here"
+        }
         
         
         do {

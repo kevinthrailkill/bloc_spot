@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		190DCFD81D10A78100222D9C /* POITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFD71D10A78100222D9C /* POITableViewCell.swift */; };
-		190DCFDF1D1C632E00222D9C /* POI+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFDD1D1C632E00222D9C /* POI+CoreDataProperties.swift */; };
-		190DCFE01D1C632E00222D9C /* POI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFDE1D1C632E00222D9C /* POI.swift */; };
 		190DCFE61D1C6E4900222D9C /* SavedAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFE51D1C6E4900222D9C /* SavedAnnotation.swift */; };
 		190DCFE81D1C6ECE00222D9C /* SavedPOIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFE71D1C6ECE00222D9C /* SavedPOIView.swift */; };
+		190DCFED1D1DDCF700222D9C /* POI+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFEB1D1DDCF700222D9C /* POI+CoreDataProperties.swift */; };
+		190DCFEE1D1DDCF700222D9C /* POI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190DCFEC1D1DDCF700222D9C /* POI.swift */; };
 		195A3F011D0CE20A00C91E77 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195A3F001D0CE20A00C91E77 /* AppDelegate.swift */; };
 		195A3F061D0CE20A00C91E77 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 195A3F041D0CE20A00C91E77 /* Main.storyboard */; };
 		195A3F081D0CE20A00C91E77 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 195A3F071D0CE20A00C91E77 /* Assets.xcassets */; };
@@ -40,10 +40,10 @@
 /* Begin PBXFileReference section */
 		11B193C19DBE7C64204E47C5 /* Pods-Bloc Spot.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Bloc Spot.release.xcconfig"; path = "Pods/Target Support Files/Pods-Bloc Spot/Pods-Bloc Spot.release.xcconfig"; sourceTree = "<group>"; };
 		190DCFD71D10A78100222D9C /* POITableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POITableViewCell.swift; sourceTree = "<group>"; };
-		190DCFDD1D1C632E00222D9C /* POI+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "POI+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		190DCFDE1D1C632E00222D9C /* POI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POI.swift; sourceTree = "<group>"; };
 		190DCFE51D1C6E4900222D9C /* SavedAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedAnnotation.swift; sourceTree = "<group>"; };
 		190DCFE71D1C6ECE00222D9C /* SavedPOIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedPOIView.swift; sourceTree = "<group>"; };
+		190DCFEB1D1DDCF700222D9C /* POI+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "POI+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		190DCFEC1D1DDCF700222D9C /* POI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = POI.swift; sourceTree = "<group>"; };
 		195A3EFD1D0CE20A00C91E77 /* Bloc Spot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bloc Spot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		195A3F001D0CE20A00C91E77 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		195A3F051D0CE20A00C91E77 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -131,8 +131,8 @@
 		1977A9171D0D0C4F003366A0 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				190DCFDD1D1C632E00222D9C /* POI+CoreDataProperties.swift */,
-				190DCFDE1D1C632E00222D9C /* POI.swift */,
+				190DCFEB1D1DDCF700222D9C /* POI+CoreDataProperties.swift */,
+				190DCFEC1D1DDCF700222D9C /* POI.swift */,
 				1977A9121D0D091C003366A0 /* BlocSpot.xcdatamodeld */,
 				1977A9151D0D0C42003366A0 /* DataController.swift */,
 				190DCFE51D1C6E4900222D9C /* SavedAnnotation.swift */,
@@ -239,6 +239,7 @@
 				TargetAttributes = {
 					195A3EFC1D0CE20A00C91E77 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = YUYDGGZ6SW;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -389,12 +390,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				190DCFD81D10A78100222D9C /* POITableViewCell.swift in Sources */,
-				190DCFDF1D1C632E00222D9C /* POI+CoreDataProperties.swift in Sources */,
 				1977A9161D0D0C42003366A0 /* DataController.swift in Sources */,
+				190DCFEE1D1DDCF700222D9C /* POI.swift in Sources */,
 				190DCFE81D1C6ECE00222D9C /* SavedPOIView.swift in Sources */,
 				1977A91D1D0DD6D4003366A0 /* SearchTableViewController.swift in Sources */,
+				190DCFED1D1DDCF700222D9C /* POI+CoreDataProperties.swift in Sources */,
 				1977A8E01D0D0187003366A0 /* MainViewController.swift in Sources */,
-				190DCFE01D1C632E00222D9C /* POI.swift in Sources */,
 				1977A8E21D0D0403003366A0 /* MapViewController.swift in Sources */,
 				195A3F011D0CE20A00C91E77 /* AppDelegate.swift in Sources */,
 				1977A9141D0D091C003366A0 /* BlocSpot.xcdatamodeld in Sources */,
@@ -528,10 +529,13 @@
 			baseConfigurationReference = 742DBE90EE57FF9683A061C2 /* Pods-Bloc Spot.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Bloc Spot/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kevinthrailkill.Bloc-Spot";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -540,10 +544,13 @@
 			baseConfigurationReference = 11B193C19DBE7C64204E47C5 /* Pods-Bloc Spot.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "Bloc Spot/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.kevinthrailkill.Bloc-Spot";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

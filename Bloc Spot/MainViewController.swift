@@ -59,6 +59,9 @@ class MainViewController: UIViewController {
         
         self.resultSearchController?.loadViewIfNeeded()
         
+        //Add to viewDidLoad:
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(MainViewController.dismissKeyboard))
+        self.spotTableView.addGestureRecognizer(tapGesture)
         
         
         do {
@@ -98,7 +101,7 @@ class MainViewController: UIViewController {
         
         cell.name?.text = poi?.name
         cell.phone?.text = poi?.phone
-        //cell.note?.text = poi?.note
+        cell.note?.text = poi?.note
         
         let spotLoc = CLLocation.init(latitude: (poi?.latitude as? Double)!, longitude: (poi?.longitude as? Double)!)
         var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
@@ -113,9 +116,26 @@ class MainViewController: UIViewController {
         }
         
         cell.poi = poi
-        
+        cell.delegate = self
+        cell.note.delegate = cell
             
         
+    }
+    
+    
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+    
+    func dismissKeyboard(){
+        self.view.endEditing(true)
+    }
+    
+    
+    
+    //Or since you wanted to dismiss when another cell is selected use:
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        dismissKeyboard()
     }
     
     
@@ -200,6 +220,8 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
      }
      */
     
+    
+    
 }
 
 extension MainViewController: NSFetchedResultsControllerDelegate  {
@@ -276,6 +298,12 @@ extension MainViewController : UISearchResultsUpdating, UISearchBarDelegate, UIS
         
     }
     
+}
+
+extension MainViewController: POITableViewCellProtocol {
+    func loadNewScreen(controller: UIViewController){
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 

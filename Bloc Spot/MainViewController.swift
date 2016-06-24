@@ -98,7 +98,7 @@ class MainViewController: UIViewController {
         
         cell.name?.text = poi?.name
         cell.phone?.text = poi?.phone
-        //cell.note?.text = poi?.note
+        cell.note?.text = poi?.note
         
         let spotLoc = CLLocation.init(latitude: (poi?.latitude as? Double)!, longitude: (poi?.longitude as? Double)!)
         var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192

@@ -334,6 +334,12 @@ extension MapViewController : MKMapViewDelegate {
             
              annotation.title = "temp"
             
+            let poi = annotation.poi
+            
+            poi.note = annotationView.note.text
+            
+            DataController.sharedInstance.updatePOI(annotation.poi)
+            
             
         }
     }

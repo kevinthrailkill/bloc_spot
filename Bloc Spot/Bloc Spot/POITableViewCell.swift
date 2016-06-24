@@ -7,14 +7,46 @@
 //
 
 import UIKit
+import MapKit
 
 class POITableViewCell: UITableViewCell {
 
+    
     @IBOutlet weak var name: UILabel!
-    @IBOutlet weak var phoneNumber: UITextView!
-    @IBOutlet weak var sub: UILabel!
     @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var categoryIcon: UIImageView!
+    @IBOutlet weak var note: UITextView!
+    @IBOutlet weak var phone: UITextView!
+    
+    @IBOutlet weak var visited: UIButton!
+    
+    @IBAction func isVisited(sender: UIButton) {
+    }
+    
+    @IBOutlet weak var category: UIButton!
+    
+    @IBAction func changeCategory(sender: UIButton) {
+    }
+    
+    @IBAction func directions(sender: UIButton) {
+        let placemark = MKPlacemark.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi!.latitude!), longitude: Double.init(poi!.longitude!)), addressDictionary: nil)
+        let mapItem = MKMapItem.init(placemark: placemark)
+        mapItem.name = poi!.name
+        mapItem.phoneNumber = poi!.phone
+        
+        
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
+        mapItem.openInMapsWithLaunchOptions(launchOptions)
+    }
+    @IBAction func share(sender: UIButton) {
+    }
+    
+    @IBAction func deletePOI(sender: UIButton) {
+        
+        DataController.sharedInstance.deletePOI(poi!)
+        
+    }
+    
+    var poi : POI?
     
     override func awakeFromNib() {
         super.awakeFromNib()

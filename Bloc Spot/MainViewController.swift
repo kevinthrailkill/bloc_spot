@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-import CoreLocation
+import MapKit
 
 class MainViewController: UIViewController {
 
@@ -92,57 +92,44 @@ class MainViewController: UIViewController {
     
     func configureCell(cell: POITableViewCell, atIndexPath indexPath: NSIndexPath) {
         // Fetch Record
-        let record = fetchedResultsController.objectAtIndexPath(indexPath)
+        let poi = fetchedResultsController.objectAtIndexPath(indexPath) as? POI
         
         // Update Cell
-        if let name = record.valueForKey("name") as? String {
-            cell.name.text = name
-            
+        
+        cell.name?.text = poi?.name
+        cell.phone?.text = poi?.phone
+        //cell.note?.text = poi?.note
+        
+        let spotLoc = CLLocation.init(latitude: (poi?.latitude as? Double)!, longitude: (poi?.longitude as? Double)!)
+        var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
+        
+        
+        distance = round(distance * 100)/100
+        
+        if(distance < 1.0){
+            cell.distance?.text = "(< 1 mi.)"
+        }else{
+            cell.distance?.text = "(" + distance.description + " mi.)"
         }
         
-        if let phone = record.valueForKey("phone") as? String {
-            cell.phoneNumber.text = phone
-        }
+        cell.poi = poi
         
-        if let city = record.valueForKey("city") as? String,
-            let state = record.valueForKey("state") as? String {
-            cell.sub.text = "\(city) \(state)"
-        }
-        
-        if let latitude = record.valueForKey("latitude") as? Double,
-            let longitude = record.valueForKey("longitude") as? Double {
-            let spotLoc = CLLocation.init(latitude: latitude, longitude: longitude)
-            var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
             
-            
-            distance = round(distance * 100)/100
-            
-            if(distance < 1.0){
-                cell.distance.text = "(< 1 mi.)"
-            }else{
-                cell.distance.text = "(" + distance.description + " mi.)"
-            }
-            
-            
-        }
-        
-        
-        
-        
-        
         
     }
     
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        
     }
-    */
+    
 
 }
 
@@ -176,6 +163,7 @@ extension MainViewController : UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
+        
     
     /*
      // Override to support conditional editing of the table view.

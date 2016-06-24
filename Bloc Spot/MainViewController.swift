@@ -113,7 +113,7 @@ class MainViewController: UIViewController {
         }
         
         cell.poi = poi
-        
+        cell.delegate = self
             
         
     }
@@ -276,6 +276,12 @@ extension MainViewController : UISearchResultsUpdating, UISearchBarDelegate, UIS
         
     }
     
+}
+
+extension MainViewController: POITableViewCellProtocol {
+    func loadNewScreen(controller: UIViewController){
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 

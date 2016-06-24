@@ -322,6 +322,7 @@ extension MapViewController : MKMapViewDelegate {
             }
             detailView!.phoneText.text = annotation.poi.phone
             detailView!.poi = annotation.poi
+            detailView!.delegate = self
             
         }
     }
@@ -395,6 +396,12 @@ extension MapViewController: NSFetchedResultsControllerDelegate  {
         }
     }
     
+}
+
+extension MapViewController : POIDetailProtocol {
+    func loadNewScreen(controller: UIViewController){
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
 }
 
 

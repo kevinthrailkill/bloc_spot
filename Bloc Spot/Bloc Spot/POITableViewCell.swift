@@ -9,8 +9,15 @@
 import UIKit
 import MapKit
 
+
+protocol POITableViewCellProtocol : NSObjectProtocol {
+    func loadNewScreen(controller: UIViewController);
+}
+
 class POITableViewCell: UITableViewCell {
 
+    
+    weak var delegate: POITableViewCellProtocol?
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var distance: UILabel!
@@ -38,6 +45,21 @@ class POITableViewCell: UITableViewCell {
         mapItem.openInMapsWithLaunchOptions(launchOptions)
     }
     @IBAction func share(sender: UIButton) {
+        
+        
+        var itemsToShare = [String]()
+        itemsToShare.append(name.text!)
+        itemsToShare.append(distance.text!)
+        itemsToShare.append(phone.text)
+        itemsToShare.append(note.text)
+        
+        let actController = UIActivityViewController.init(activityItems: itemsToShare, applicationActivities: nil)
+        
+        
+        self.delegate?.loadNewScreen(actController)
+        
+        
+        
     }
     
     @IBAction func deletePOI(sender: UIButton) {

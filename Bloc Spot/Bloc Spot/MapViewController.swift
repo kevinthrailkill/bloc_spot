@@ -125,41 +125,40 @@ class MapViewController: UIViewController {
     
     func savePOI(){
         if let selectedPin = selectedPin {
+           
+            let oldAnnotations = mapView.annotations
+            
+            for annotation in oldAnnotations {
+                if(selectedPin.placemark.coordinate.longitude == annotation.coordinate.longitude && selectedPin.placemark.coordinate.latitude == annotation.coordinate.latitude){
+                    mapView.removeAnnotation(annotation)
+                }
+            }
+            
+            
             DataController.sharedInstance.saveMapItem(selectedPin)
         }
     }
     
     func fetchResultsInsert(poi: POI) {
         
-        let placemark = MKPlacemark.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), addressDictionary: nil)
         
-        
-        
-        let mapItem = MKMapItem.init(placemark: placemark)
-        mapItem.name = poi.name
-        mapItem.phoneNumber = poi.phone
-        
-        droppedPins.append(mapItem)
-        
-        
-        var sub : String?
-        
-        if let city = poi.city,
-            let state = poi.state {
-            sub = "\(city) \(state)"
-        }
-        
-        
-        let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), title: poi.name!, subtitle: sub!, category: poi.category!)
-        
-        
-        
-        
+        let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), poi: poi)
+
         mapView.addAnnotation(annotation)
     }
     
     func fetchResultsDelete(poi: POI) {
-       // mapView.removeAnnotation(annotation: MKAnnotation)
+        
+        let coordinate = CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!))
+        
+        
+        let oldAnnotations = mapView.annotations
+        
+        for annotation in oldAnnotations {
+            if(coordinate.longitude == annotation.coordinate.longitude && coordinate.latitude == annotation.coordinate.latitude){
+                mapView.removeAnnotation(annotation)
+            }
+        }
     }
     
     func fetchResultsUpdated(poi: POI) {
@@ -251,9 +250,6 @@ extension MapViewController : MKMapViewDelegate {
 
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView?.canShowCallout = true
-
-            
-
             
             pinView?.pinTintColor = UIColor.redColor()
 
@@ -265,9 +261,6 @@ extension MapViewController : MKMapViewDelegate {
             annotationView!.addConstraint(heightConstraint)
             
             
-            annotationView.title.text = annotation.title!
-            annotationView.distance.text = annotation.subtitle!
-
             pinView?.detailCalloutAccessoryView = annotationView
 
             
@@ -298,6 +291,51 @@ extension MapViewController : MKMapViewDelegate {
             
         }
         
+    }
+    
+    
+    func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+        print("Annotation selected")
+        
+        if let annotation = view.annotation as? SavedAnnotation {
+            print("Your annotation title: \(annotation.poi.name!)");
+            
+            annotation.title = ""
+            
+            let detailView = view.detailCalloutAccessoryView as? SavedPOIView
+            
+            detailView!.title.text = annotation.poi.name!
+            
+            if let latitude = annotation.poi.latitude as? Double,
+                let longitude = annotation.poi.longitude as? Double {
+                let spotLoc = CLLocation.init(latitude: latitude, longitude: longitude)
+                var distance = spotLoc.distanceFromLocation(DataController.sharedInstance.currentLocation!) * 0.000621371192
+                
+                
+                distance = round(distance * 100)/100
+                
+                if(distance < 1.0){
+                    detailView!.distance.text = "(< 1 mi.)"
+                }else{
+                    detailView!.distance.text = "(" + distance.description + " mi.)"
+                }
+            }
+            detailView!.phoneText.text = annotation.poi.phone
+            detailView!.poi = annotation.poi
+            
+        }
+    }
+    
+    func mapView( mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
+        print("Annotation selected")
+        
+        if let annotation = view.annotation as? SavedAnnotation {
+            print("Your deselected annotation title: \(annotation.poi.name!)");
+            
+             annotation.title = "temp"
+            
+            
+        }
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl){
@@ -338,10 +376,13 @@ extension MapViewController: NSFetchedResultsControllerDelegate  {
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
         switch (type) {
         case .Insert:
+            fetchResultsInsert((anObject as? POI)!)
             break;
         case .Delete:
+            fetchResultsDelete((anObject as? POI)!)
             break;
         case .Update:
+            fetchResultsUpdated((anObject as? POI)!)
             break;
         case .Move:
             break;

@@ -14,14 +14,12 @@ class SavedAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
     var subtitle: String?
-    var category: String?
+    var poi: POI
     
-    init(coordinate: CLLocationCoordinate2D, title: String, subtitle: String, category: String) {
+    init(coordinate: CLLocationCoordinate2D, poi: POI) {
         self.coordinate = coordinate
-        self.title = title
-        self.subtitle = subtitle
-        self.category = category
-        
+        self.poi = poi
+        self.title = "Hello"
     }
 
 }

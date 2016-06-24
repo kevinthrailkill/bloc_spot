@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import MapKit
 
 class SavedPOIView: UIView {
 
     @IBOutlet weak var title: UILabel!
     @IBOutlet weak var distance: UILabel!
-    @IBOutlet weak var phone: UILabel!
+    @IBOutlet weak var phoneText: UITextView!
     @IBOutlet weak var note: UITextView!
     @IBOutlet weak var category: UILabel!
     
@@ -21,13 +22,26 @@ class SavedPOIView: UIView {
     }
     
     @IBAction func getDirections(sender: UIButton) {
+        
+        let placemark = MKPlacemark.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi!.latitude!), longitude: Double.init(poi!.longitude!)), addressDictionary: nil)
+        let mapItem = MKMapItem.init(placemark: placemark)
+        mapItem.name = poi!.name
+        mapItem.phoneNumber = poi!.phone
+        
+        
+        let launchOptions = [MKLaunchOptionsDirectionsModeKey : MKLaunchOptionsDirectionsModeDriving]
+        mapItem.openInMapsWithLaunchOptions(launchOptions)
     }
     
     @IBAction func sharePOI(sender: UIButton) {
+        
     }
     
     @IBAction func deletePOI(sender: UIButton) {
+        DataController.sharedInstance.deletePOI(poi!)
     }
+    
+    var poi: POI?
     
     
     /*

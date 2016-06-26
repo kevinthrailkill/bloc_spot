@@ -33,6 +33,7 @@ class MapViewController: UIViewController {
     var resultSearchController:UISearchController? = nil
 
     var currentLocation : CLLocation?
+    var catChange : Bool?
     
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -146,6 +147,12 @@ class MapViewController: UIViewController {
         let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), poi: poi)
 
         mapView.addAnnotation(annotation)
+        
+        if(catChange == true){
+            catChange = false
+            mapView.selectAnnotation(annotation, animated: true)
+        }
+        
     }
     
     func fetchResultsDelete(poi: POI) {
@@ -196,6 +203,7 @@ class MapViewController: UIViewController {
             catViewController.selectedIndex = buttonCell.poi?.category as? Int
             
             selectedPOI = buttonCell.poi!
+            catChange = true
             
         }
         
@@ -351,6 +359,17 @@ extension MapViewController : MKMapViewDelegate {
             detailView!.category.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             detailView!.category.backgroundColor = Category(rawValue: catInt)?.categoryColor()
             
+            let isVisited = detailView!.poi!.visited as! Bool
+            
+            if(isVisited == true){
+                detailView!.visited.setBackgroundImage(UIImage(named: "Visited.png"), forState: UIControlState.Normal)
+            }else{
+                detailView!.visited.setBackgroundImage(UIImage(named: "not Visited.png"), forState: UIControlState.Normal)
+            }
+            
+            detailView!.isV = isVisited
+            
+            
             
         }
     }
@@ -366,6 +385,7 @@ extension MapViewController : MKMapViewDelegate {
             let poi = annotation.poi
             
             poi.note = annotationView.note.text
+            poi.visited = annotationView.isV
             
             DataController.sharedInstance.updatePOI(annotation.poi)
             

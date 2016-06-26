@@ -17,6 +17,8 @@ class MainViewController: UIViewController {
     
     var resultSearchController:UISearchController? = nil
     
+    var selectedPOI : POI?
+    
     lazy var fetchedResultsController: NSFetchedResultsController = {
         // Initialize Fetch Request
         let fetchRequest = NSFetchRequest(entityName: "POI")
@@ -118,6 +120,12 @@ class MainViewController: UIViewController {
         cell.poi = poi
         cell.delegate = self
         cell.note.delegate = cell
+        
+        let catInt = poi?.category as! Int
+        
+        cell.category.setTitle(Category(rawValue: catInt)?.categoryName(), forState: UIControlState.Normal)
+        cell.category.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+        cell.category.backgroundColor = Category(rawValue: catInt)?.categoryColor()
             
         
     }
@@ -147,10 +155,21 @@ class MainViewController: UIViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        
-    }
-    
+        if (segue.identifier == "Category Main") {
+            // pass data to next view
+            
+            
+            let buttonCell = sender?.superview?!.superview as! POITableViewCell
 
+            let catViewController = segue.destinationViewController as! CategoryViewController
+            catViewController.delegate = self
+            catViewController.selectedIndex = Category.None.rawValue
+            catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            
+            selectedPOI = buttonCell.poi!
+            
+        }
+    }
 }
 
 extension MainViewController : UITableViewDelegate, UITableViewDataSource {
@@ -303,6 +322,19 @@ extension MainViewController : UISearchResultsUpdating, UISearchBarDelegate, UIS
 extension MainViewController: POITableViewCellProtocol {
     func loadNewScreen(controller: UIViewController){
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+}
+
+extension MainViewController: CategoryProtocol {
+    func updateCategory(category: Category){
+        print(category)
+        
+        selectedPOI?.category = category.rawValue
+        
+        DataController.sharedInstance.updatePOI(selectedPOI!)
+        
+        self.spotTableView.reloadData()
+        
     }
 }
 

@@ -23,7 +23,7 @@ class SavedPOIView: UIView {
     @IBOutlet weak var distance: UILabel!
     @IBOutlet weak var phoneText: UITextView!
     @IBOutlet weak var note: UITextView!
-    @IBOutlet weak var category: UILabel!
+    @IBOutlet weak var category: UIButton!
     
     @IBOutlet weak var visited: UIButton!
     @IBAction func clickVisited(sender: UIButton) {

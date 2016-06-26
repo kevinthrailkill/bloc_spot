@@ -2,7 +2,7 @@
 //  POI+CoreDataProperties.swift
 //  Bloc Spot
 //
-//  Created by Kevin Thrailkill on 6/24/16.
+//  Created by Kevin Thrailkill on 6/25/16.
 //  Copyright © 2016 kevinthrailkill. All rights reserved.
 //
 //  Choose "Create NSManagedObject Subclass…" from the Core Data editor menu
@@ -14,14 +14,14 @@ import CoreData
 
 extension POI {
 
-    @NSManaged var category: String?
+    @NSManaged var category: NSNumber?
     @NSManaged var city: String?
     @NSManaged var latitude: NSNumber?
     @NSManaged var longitude: NSNumber?
     @NSManaged var name: String?
+    @NSManaged var note: String?
     @NSManaged var phone: String?
     @NSManaged var state: String?
     @NSManaged var visited: NSNumber?
-    @NSManaged var note: String?
 
 }

@@ -173,7 +173,11 @@
                                 <segue destination="GB4-U9-8WX" kind="show" identifier="MainControllerSegue" id="egw-Q6-pWc"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" image="Category Icon" id="b7q-ep-yoX"/>
+                        <barButtonItem key="rightBarButtonItem" image="Category Icon" id="b7q-ep-yoX">
+                            <connections>
+                                <segue destination="VpD-ie-6Mu" kind="presentation" identifier="Map Filter" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="2jj-Te-u1i"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="annotationView" destination="Tkm-uf-ttn" id="20p-YP-VGe"/>
@@ -547,6 +551,6 @@
         <image name="trash" width="90" height="90"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ekx-jv-TW8"/>
+        <segue reference="2jj-Te-u1i"/>
     </inferredMetricsTieBreakers>
 </document>

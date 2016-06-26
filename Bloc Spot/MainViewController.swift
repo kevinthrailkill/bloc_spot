@@ -175,7 +175,7 @@ class MainViewController: UIViewController {
             catViewController.delegate = self
             catViewController.selectedIndex = Category.None.rawValue
             catViewController.selectedIndex = buttonCell.poi?.category as? Int
-            
+            catViewController.isFilterView = false
             selectedPOI = buttonCell.poi!
             
         }
@@ -345,6 +345,10 @@ extension MainViewController: CategoryProtocol {
         
         self.spotTableView.reloadData()
         
+    }
+    
+    func filterCategory(categories: [Int]) {
+        //leave blank
     }
 }
 

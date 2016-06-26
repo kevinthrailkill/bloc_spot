@@ -35,6 +35,8 @@ class MapViewController: UIViewController {
     var currentLocation : CLLocation?
     var catChange : Bool?
     
+    var filterCategories: [Int]?
+    
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         // Initialize Fetch Request
@@ -89,6 +91,7 @@ class MapViewController: UIViewController {
         definesPresentationContext = true
         
         
+        
         locationSearchTable.handleMapSearchDelegate = self
         
         self.resultSearchController?.loadViewIfNeeded()
@@ -104,6 +107,10 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.fetchedResultsController.fetchRequest.predicate = nil
+        
+        filterCategories = [1,1,1,1,1,1]
         
         do {
             try self.fetchedResultsController.performFetch()
@@ -201,11 +208,26 @@ class MapViewController: UIViewController {
             catViewController.delegate = self
             catViewController.selectedIndex = Category.None.rawValue
             catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            catViewController.isFilterView = false
             
             selectedPOI = buttonCell.poi!
             catChange = true
             
+        } else if (segue.identifier == "Map Filter") {
+            // pass data to next view
+            
+            
+            
+            let catViewController = segue.destinationViewController as! CategoryViewController
+            catViewController.delegate = self
+//            catViewController.selectedIndex = Category.None.rawValue
+//            catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            catViewController.isFilterView = true
+            catViewController.selectedIndexes = filterCategories
+            
+                        
         }
+        
         
 
         
@@ -457,10 +479,36 @@ extension MapViewController: CategoryProtocol {
         print(category)
         
         selectedPOI?.category = category.rawValue
+
+    }
+    
+    func filterCategory(categories: [Int]) {
+       filterCategories = categories
+        
+        var searchString : String = ""
+        
+        for i in 0..<Category.count {
+            if(categories[i] == 1){
+                let temp = "category = " + String(i) + " || "
+                searchString += temp
+            }
+        }
+        
+        let range = searchString.startIndex.advancedBy(0) ..< searchString.endIndex.advancedBy(-4)
         
         
+                
+        let resultPredicate = NSPredicate(format: searchString.substringWithRange(range))
+         self.fetchedResultsController.fetchRequest.predicate = resultPredicate
         
         
+        do {
+            try self.fetchedResultsController.performFetch()
+            self.configureAnnotation()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
     }
 }
 

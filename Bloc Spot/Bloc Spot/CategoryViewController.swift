@@ -11,6 +11,7 @@ import UIKit
 
 protocol CategoryProtocol : NSObjectProtocol {
     func updateCategory(category: Category);
+    func filterCategory(categories: [Int])
 }
 
 enum Category : Int {
@@ -73,7 +74,10 @@ class CategoryViewController: UIViewController {
     
     weak var delegate: CategoryProtocol?
     
+    var isFilterView: Bool?
+    
     var selectedIndex: Int?
+    var selectedIndexes: [Int]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -82,10 +86,16 @@ class CategoryViewController: UIViewController {
         tap.delegate = self
         self.invisibleView.addGestureRecognizer(tap)
         
+        if(isFilterView == false){
         
-        let indexPath = NSIndexPath(forRow: selectedIndex!, inSection: 0)
-        self.catTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
-      
+            let indexPath = NSIndexPath(forRow: selectedIndex!, inSection: 0)
+            self.catTableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+            self.catTableView.allowsMultipleSelection = false
+
+        }else{
+            self.catTableView.allowsMultipleSelection = true
+
+        }
 
         // Do any additional setup after loading the view.
     }
@@ -98,10 +108,18 @@ class CategoryViewController: UIViewController {
     
     func handleTap(sender: UITapGestureRecognizer) {
         
-        let cat = Category(rawValue: selectedIndex!)
-        self.delegate?.updateCategory(cat!)
-        self.dismissViewControllerAnimated(true, completion: nil)
+        if(isFilterView == false){
+            
+            let cat = Category(rawValue: selectedIndex!)
+            self.delegate?.updateCategory(cat!)
         
+        }else{
+            self.delegate?.filterCategory(selectedIndexes!)
+        }
+        
+        
+        self.dismissViewControllerAnimated(true, completion: nil)
+
     }
     
     
@@ -130,7 +148,11 @@ extension CategoryViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        
         return Category.count
+        
+        
     }
     
     
@@ -147,10 +169,18 @@ extension CategoryViewController : UITableViewDelegate, UITableViewDataSource {
         }
         
         
-        if indexPath.row == selectedIndex {
-            cell.accessoryType =  UITableViewCellAccessoryType.Checkmark
+        if(isFilterView == false){
+            if indexPath.row == selectedIndex {
+                cell.accessoryType =  UITableViewCellAccessoryType.Checkmark
+            }else{
+                cell.accessoryType =  UITableViewCellAccessoryType.None
+            }
         }else{
-            cell.accessoryType =  UITableViewCellAccessoryType.None
+            if selectedIndexes![indexPath.row] == 1 {
+                cell.accessoryType =  UITableViewCellAccessoryType.Checkmark
+            }else{
+                cell.accessoryType =  UITableViewCellAccessoryType.None
+            }
         }
         
         
@@ -158,11 +188,28 @@ extension CategoryViewController : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Category"
+        
+        if(isFilterView == true){
+            return "Filter by Categories"
+        }else{
+            return "Category"
+        }
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        selectedIndex = indexPath.row
+        
+        if(isFilterView == false){
+        
+            selectedIndex = indexPath.row
+        
+        }else{
+            
+            if(selectedIndexes![indexPath.row] == 0){
+                selectedIndexes![indexPath.row] = 1
+            }else{
+                selectedIndexes![indexPath.row] = 0
+            }
+        }
         
         tableView.reloadData()
     }

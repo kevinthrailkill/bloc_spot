@@ -21,6 +21,7 @@ class MapViewController: UIViewController {
     @IBOutlet var annotationView: SavedPOIView!
     @IBOutlet weak var mapView: MKMapView!
     
+    var selectedPOI : POI?
    
     
     let dataController = DataController.sharedInstance
@@ -183,6 +184,19 @@ class MapViewController: UIViewController {
             
             
             
+        } else if (segue.identifier == "Category Map") {
+            // pass data to next view
+            
+            
+            let buttonCell = sender?.superview as! SavedPOIView
+            
+            let catViewController = segue.destinationViewController as! CategoryViewController
+            catViewController.delegate = self
+            catViewController.selectedIndex = Category.None.rawValue
+            catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            
+            selectedPOI = buttonCell.poi!
+            
         }
         
 
@@ -251,7 +265,13 @@ extension MapViewController : MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView?.canShowCallout = true
             
-            pinView?.pinTintColor = UIColor.redColor()
+            
+            
+            let tempAnnotation = annotation as? SavedAnnotation
+            
+            
+            
+            pinView?.pinTintColor = Category(rawValue: tempAnnotation?.poi.category as! Int)!.categoryColor()
 
             
             let widthConstraint = NSLayoutConstraint(item: annotationView!, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1, constant: 250)
@@ -324,6 +344,13 @@ extension MapViewController : MKMapViewDelegate {
             detailView!.phoneText.text = annotation.poi.phone
             detailView!.poi = annotation.poi
             detailView!.delegate = self
+            
+            let catInt = detailView!.poi!.category as! Int
+            
+            detailView!.category.setTitle(Category(rawValue: catInt)?.categoryName(), forState: UIControlState.Normal)
+            detailView!.category.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
+            detailView!.category.backgroundColor = Category(rawValue: catInt)?.categoryColor()
+            
             
         }
     }
@@ -402,6 +429,18 @@ extension MapViewController: NSFetchedResultsControllerDelegate  {
 extension MapViewController : POIDetailProtocol {
     func loadNewScreen(controller: UIViewController){
         self.presentViewController(controller, animated: true, completion: nil)
+    }
+}
+
+extension MapViewController: CategoryProtocol {
+    func updateCategory(category: Category){
+        print(category)
+        
+        selectedPOI?.category = category.rawValue
+        
+        
+        
+        
     }
 }
 

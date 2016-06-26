@@ -279,7 +279,7 @@
                             <rect key="frame" x="8" y="110" width="87" height="30"/>
                             <state key="normal" title="Category"/>
                             <connections>
-                                <segue destination="VpD-ie-6Mu" kind="presentation" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="EkA-cD-ttI"/>
+                                <segue destination="VpD-ie-6Mu" kind="presentation" identifier="Category Map" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="EkA-cD-ttI"/>
                             </connections>
                         </button>
                     </subviews>
@@ -543,6 +543,6 @@
         <image name="trash" width="90" height="90"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ekx-jv-TW8"/>
+        <segue reference="EkA-cD-ttI"/>
     </inferredMetricsTieBreakers>
 </document>

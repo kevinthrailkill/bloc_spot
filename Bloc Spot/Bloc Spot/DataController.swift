@@ -120,7 +120,7 @@ class DataController : NSObject {
         poi.longitude = mapitem.placemark.coordinate.longitude
         poi.name = mapitem.name
         poi.phone = mapitem.phoneNumber
-        poi.category = "All"
+        poi.category = Category.None.rawValue
         poi.visited = false
         poi.city = mapitem.placemark.locality
         poi.state = mapitem.placemark.administrativeArea

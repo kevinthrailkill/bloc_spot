@@ -40,6 +40,8 @@ class DataController : NSObject {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
         locationManager.requestWhenInUseAuthorization()
+        locationManager.requestAlwaysAuthorization()   // And this one
+
         locationManager.requestLocation()
     
     }
@@ -128,11 +130,31 @@ class DataController : NSObject {
         
         
         
+        //notification setting
+        
+        let locNotification = UILocalNotification.init()
+        
+        locNotification.alertTitle = poi.name
+        locNotification.alertBody = "You are close to the following location"
+        locNotification.regionTriggersOnce = true
+        
+        let identifier = poi.name! + String(poi.latitude) + String(poi.longitude)
+        
+        let region = CLCircularRegion.init(center: CLLocationCoordinate2D.init(latitude: mapitem.placemark.coordinate.latitude, longitude: mapitem.placemark.coordinate.longitude), radius: 1000.0, identifier: identifier)
+        
+        locNotification.region = region
+        
+        //should i put this here
+        //UIApplication.sharedApplication().scheduleLocalNotification(locNotification)
+
         do {
             try managedObjectContext.save()
+           //
         } catch {
             fatalError("Failure to save context: \(error)")
         }
+        UIApplication.sharedApplication().scheduleLocalNotification(locNotification)
+        
         
     }
     

@@ -25,8 +25,24 @@ class SavedPOIView: UIView {
     @IBOutlet weak var note: UITextView!
     @IBOutlet weak var category: UIButton!
     
+    var isV : Bool?
+    
     @IBOutlet weak var visited: UIButton!
     @IBAction func clickVisited(sender: UIButton) {
+        
+        print("sender")
+        
+        
+        
+        if(isV == false){
+            visited.setBackgroundImage(UIImage(named: "Visited.png"), forState: UIControlState.Normal)
+            isV = true
+        }else{
+            visited.setBackgroundImage(UIImage(named: "not Visited.png"), forState: UIControlState.Normal)
+            isV = false
+        }
+        
+        
     }
     
     @IBAction func getDirections(sender: UIButton) {

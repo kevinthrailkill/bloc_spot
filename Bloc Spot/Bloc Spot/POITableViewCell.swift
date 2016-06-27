@@ -27,6 +27,20 @@ class POITableViewCell: UITableViewCell {
     @IBOutlet weak var visited: UIButton!
     
     @IBAction func isVisited(sender: UIButton) {
+        
+        let isVisited = poi?.visited as! Bool
+        
+        if(isVisited == false){
+            visited.setBackgroundImage(UIImage(named: "Visited.png"), forState: UIControlState.Normal)
+            poi?.visited = true
+        }else{
+            visited.setBackgroundImage(UIImage(named: "not Visited.png"), forState: UIControlState.Normal)
+            poi?.visited = false
+        }
+        
+        DataController.sharedInstance.updatePOI(poi!)
+        
+        
     }
     
     @IBOutlet weak var category: UIButton!

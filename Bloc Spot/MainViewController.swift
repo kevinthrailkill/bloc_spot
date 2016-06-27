@@ -126,7 +126,17 @@ class MainViewController: UIViewController {
         cell.category.setTitle(Category(rawValue: catInt)?.categoryName(), forState: UIControlState.Normal)
         cell.category.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
         cell.category.backgroundColor = Category(rawValue: catInt)?.categoryColor()
-            
+        
+        
+        
+        let isVisited = poi?.visited as! Bool
+        
+        if(isVisited == true){
+            cell.visited.setBackgroundImage(UIImage(named: "Visited.png"), forState: UIControlState.Normal)
+        }else{
+            cell.visited.setBackgroundImage(UIImage(named: "not Visited.png"), forState: UIControlState.Normal)
+        }
+        
         
     }
     
@@ -165,7 +175,7 @@ class MainViewController: UIViewController {
             catViewController.delegate = self
             catViewController.selectedIndex = Category.None.rawValue
             catViewController.selectedIndex = buttonCell.poi?.category as? Int
-            
+            catViewController.isFilterView = false
             selectedPOI = buttonCell.poi!
             
         }
@@ -335,6 +345,10 @@ extension MainViewController: CategoryProtocol {
         
         self.spotTableView.reloadData()
         
+    }
+    
+    func filterCategory(categories: [Int]) {
+        //leave blank
     }
 }
 

@@ -33,6 +33,9 @@ class MapViewController: UIViewController {
     var resultSearchController:UISearchController? = nil
 
     var currentLocation : CLLocation?
+    var catChange : Bool?
+    
+    var filterCategories: [Int]?
     
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -88,6 +91,7 @@ class MapViewController: UIViewController {
         definesPresentationContext = true
         
         
+        
         locationSearchTable.handleMapSearchDelegate = self
         
         self.resultSearchController?.loadViewIfNeeded()
@@ -103,6 +107,10 @@ class MapViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        
+        self.fetchedResultsController.fetchRequest.predicate = nil
+        
+        filterCategories = [1,1,1,1,1,1]
         
         do {
             try self.fetchedResultsController.performFetch()
@@ -146,6 +154,12 @@ class MapViewController: UIViewController {
         let annotation = SavedAnnotation.init(coordinate: CLLocationCoordinate2D.init(latitude: Double.init(poi.latitude!), longitude: Double.init(poi.longitude!)), poi: poi)
 
         mapView.addAnnotation(annotation)
+        
+        if(catChange == true){
+            catChange = false
+            mapView.selectAnnotation(annotation, animated: true)
+        }
+        
     }
     
     func fetchResultsDelete(poi: POI) {
@@ -194,10 +208,26 @@ class MapViewController: UIViewController {
             catViewController.delegate = self
             catViewController.selectedIndex = Category.None.rawValue
             catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            catViewController.isFilterView = false
             
             selectedPOI = buttonCell.poi!
+            catChange = true
             
+        } else if (segue.identifier == "Map Filter") {
+            // pass data to next view
+            
+            
+            
+            let catViewController = segue.destinationViewController as! CategoryViewController
+            catViewController.delegate = self
+//            catViewController.selectedIndex = Category.None.rawValue
+//            catViewController.selectedIndex = buttonCell.poi?.category as? Int
+            catViewController.isFilterView = true
+            catViewController.selectedIndexes = filterCategories
+            
+                        
         }
+        
         
 
         
@@ -351,6 +381,17 @@ extension MapViewController : MKMapViewDelegate {
             detailView!.category.setTitleColor(UIColor.whiteColor(), forState: UIControlState.Normal)
             detailView!.category.backgroundColor = Category(rawValue: catInt)?.categoryColor()
             
+            let isVisited = detailView!.poi!.visited as! Bool
+            
+            if(isVisited == true){
+                detailView!.visited.setBackgroundImage(UIImage(named: "Visited.png"), forState: UIControlState.Normal)
+            }else{
+                detailView!.visited.setBackgroundImage(UIImage(named: "not Visited.png"), forState: UIControlState.Normal)
+            }
+            
+            detailView!.isV = isVisited
+            
+            
             
         }
     }
@@ -366,6 +407,7 @@ extension MapViewController : MKMapViewDelegate {
             let poi = annotation.poi
             
             poi.note = annotationView.note.text
+            poi.visited = annotationView.isV
             
             DataController.sharedInstance.updatePOI(annotation.poi)
             
@@ -437,10 +479,36 @@ extension MapViewController: CategoryProtocol {
         print(category)
         
         selectedPOI?.category = category.rawValue
+
+    }
+    
+    func filterCategory(categories: [Int]) {
+       filterCategories = categories
+        
+        var searchString : String = ""
+        
+        for i in 0..<Category.count {
+            if(categories[i] == 1){
+                let temp = "category = " + String(i) + " || "
+                searchString += temp
+            }
+        }
+        
+        let range = searchString.startIndex.advancedBy(0) ..< searchString.endIndex.advancedBy(-4)
         
         
+                
+        let resultPredicate = NSPredicate(format: searchString.substringWithRange(range))
+         self.fetchedResultsController.fetchRequest.predicate = resultPredicate
         
         
+        do {
+            try self.fetchedResultsController.performFetch()
+            self.configureAnnotation()
+        } catch {
+            let fetchError = error as NSError
+            print("\(fetchError), \(fetchError.userInfo)")
+        }
     }
 }
 

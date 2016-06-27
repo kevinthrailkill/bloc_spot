@@ -270,7 +270,7 @@
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="six-qJ-tVp">
-                            <rect key="frame" x="8" y="110" width="87" height="30"/>
+                            <rect key="frame" x="8" y="110" width="117" height="30"/>
                             <state key="normal" title="Category"/>
                             <connections>
                                 <segue destination="VpD-ie-6Mu" kind="presentation" identifier="Category Map" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="EkA-cD-ttI"/>
@@ -295,12 +295,12 @@
                         <constraint firstAttribute="trailing" secondItem="Zxk-Uv-T9r" secondAttribute="trailing" id="1Xp-AX-rh1"/>
                         <constraint firstItem="Wg3-fV-wjr" firstAttribute="trailing" secondItem="bRk-9O-jiE" secondAttribute="trailing" id="3Yb-sr-4pV"/>
                         <constraint firstItem="eRH-XU-Mpw" firstAttribute="leading" secondItem="six-qJ-tVp" secondAttribute="leading" id="6HI-8s-eqo"/>
-                        <constraint firstItem="tIb-rz-GYO" firstAttribute="trailing" secondItem="six-qJ-tVp" secondAttribute="trailing" id="7a0-93-piT"/>
+                        <constraint firstItem="tIb-rz-GYO" firstAttribute="trailing" secondItem="six-qJ-tVp" secondAttribute="trailing" constant="-30" id="7a0-93-piT"/>
                         <constraint firstItem="Zxk-Uv-T9r" firstAttribute="top" secondItem="Wg3-fV-wjr" secondAttribute="bottom" constant="6" id="9bF-gd-WEJ"/>
                         <constraint firstItem="Zxk-Uv-T9r" firstAttribute="top" secondItem="25v-32-gXL" secondAttribute="bottom" constant="21" id="BX6-wP-474"/>
                         <constraint firstItem="tIb-rz-GYO" firstAttribute="top" secondItem="Tkm-uf-ttn" secondAttribute="top" constant="44" id="CiF-NQ-j4n"/>
                         <constraint firstItem="Zxk-Uv-T9r" firstAttribute="centerX" secondItem="eRH-XU-Mpw" secondAttribute="centerX" id="DfU-cu-0wc"/>
-                        <constraint firstItem="4qf-Ul-doN" firstAttribute="leading" secondItem="six-qJ-tVp" secondAttribute="trailing" constant="44" id="HMZ-i6-3nW"/>
+                        <constraint firstItem="4qf-Ul-doN" firstAttribute="leading" secondItem="six-qJ-tVp" secondAttribute="trailing" constant="14" id="HMZ-i6-3nW"/>
                         <constraint firstItem="7ux-V4-QhG" firstAttribute="leading" secondItem="25v-32-gXL" secondAttribute="trailing" constant="9" id="IAd-i7-gip"/>
                         <constraint firstItem="tIb-rz-GYO" firstAttribute="leading" secondItem="Tkm-uf-ttn" secondAttribute="leading" constant="95" id="Jcp-QS-riF"/>
                         <constraint firstItem="4qf-Ul-doN" firstAttribute="top" secondItem="eRH-XU-Mpw" secondAttribute="bottom" constant="6" id="LSE-zt-ebK"/>
@@ -361,7 +361,7 @@
                                         <rect key="frame" x="0.0" y="92" width="600" height="164"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="HkV-ua-VLn" id="6jY-Md-mOV">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="164"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="163.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QbL-bv-sW9">

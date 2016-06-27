@@ -44,7 +44,7 @@ class MainViewController: UIViewController {
         self.navigationItem.hidesBackButton = true
         navigationItem.leftBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "Map Icon"), style: UIBarButtonItemStyle.Plain, target: self, action: #selector(backTapped))
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "Category Icon"), style: UIBarButtonItemStyle.Plain, target: self, action: nil)
+//        navigationItem.rightBarButtonItem = UIBarButtonItem.init(image: UIImage(named: "Category Icon"), style: UIBarButtonItemStyle.Plain, target: self, action: nil)
         
         resultSearchController = UISearchController(searchResultsController: nil)
         resultSearchController?.searchResultsUpdater = self

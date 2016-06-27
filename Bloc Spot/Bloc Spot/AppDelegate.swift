@@ -25,7 +25,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         application.registerUserNotificationSettings(UIUserNotificationSettings(forTypes: [.Alert, .Sound], categories: nil))
         
-        UIApplication.sharedApplication().cancelAllLocalNotifications()
+    //  do i need this
+    //  UIApplication.sharedApplication().cancelAllLocalNotifications()
 
 
         
